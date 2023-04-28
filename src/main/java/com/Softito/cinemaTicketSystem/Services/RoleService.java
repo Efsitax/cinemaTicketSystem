@@ -27,10 +27,10 @@ public class RoleService implements IBaseService<Role> {
     }
 
     @Override
-    public Role update(Long id, Role role) {
+    public Role update(Long id, Role entity) {
         Role existingRole = getById(id);
         if (existingRole != null) {
-            existingRole.setName(role.getName());
+            existingRole.setName(entity.getName());
             return roleRepository.save(existingRole);
         }
         return null;
