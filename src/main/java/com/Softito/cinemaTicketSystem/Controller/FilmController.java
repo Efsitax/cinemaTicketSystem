@@ -1,39 +1,41 @@
 package com.Softito.cinemaTicketSystem.Controller;
 
-import com.Softito.cinemaTicketSystem.Model.Role;
-import com.Softito.cinemaTicketSystem.Services.RoleService;
+
+import com.Softito.cinemaTicketSystem.Model.Film;
+import com.Softito.cinemaTicketSystem.Services.FilmService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/roles")
-public class RoleController {
+@RequestMapping("/films")
+public class FilmController {
     @Autowired
-    private RoleService service ;
+    private FilmService service ;
 
     @GetMapping("")
-    public List<Role> getAllRoles() {
+    public List<Film> getAllFilms() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public Role getRoleById(@PathVariable Long id) {
+    public Film getFilmById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping("/add")
-    public Role createRole(@RequestBody Role entity) {
+    public Film createFilm(@RequestBody Film entity) {
         return service.create(entity);
     }
     @DeleteMapping("/delete/{id}")
-    public Boolean deleteRole(@PathVariable Long id) {
+    public Boolean deleteFilm(@PathVariable Long id) {
         return service.delete(id);
     }
 
     @PutMapping("/update/{id}")
-    public Role updateRole(@PathVariable Long id, @RequestBody Role entity) {
+    public Film updateFilm(@PathVariable Long id, @RequestBody Film entity) {
         return service.update(id, entity);
     }
 }
