@@ -1,5 +1,7 @@
 package com.Softito.cinemaTicketSystem.Model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,6 +51,12 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated_at;
 
+    @JsonCreator
+    public User(@JsonProperty("user_id") Long id) {
+        this.userId = id;
+    }
+    public User(){
 
+    }
 
 }

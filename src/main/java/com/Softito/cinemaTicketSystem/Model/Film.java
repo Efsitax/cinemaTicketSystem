@@ -24,7 +24,7 @@ public class Film {
     @Column(name = "is_active")
     private Boolean isActive;
     @JsonCreator
-    public Film(@JsonProperty("role_id") Long id) {
+    public Film(@JsonProperty("film_id") Long id) {
         this.filmId = id;
     }
     public Film(){
