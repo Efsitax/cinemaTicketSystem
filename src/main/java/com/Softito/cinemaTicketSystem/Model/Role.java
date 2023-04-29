@@ -21,5 +21,8 @@ public class Role {
     public Role(@JsonProperty("role_id") Long id) {
         this.role_id = id;
     }
+    public Role(){
+
+    }
 
 }

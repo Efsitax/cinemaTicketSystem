@@ -31,6 +31,9 @@ public class FilmService implements IBaseService<Film>{
         Film existingFilm = getById(id);
         if (existingFilm != null) {
             existingFilm.setName(entity.getName());
+            existingFilm.setDuration(entity.getDuration());
+            existingFilm.setPrice(entity.getPrice());
+            existingFilm.setIsActive(entity.getIsActive());
             return repository.save(existingFilm);
         }
         return null;
