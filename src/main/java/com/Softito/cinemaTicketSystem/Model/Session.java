@@ -1,5 +1,7 @@
 package com.Softito.cinemaTicketSystem.Model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,8 +15,6 @@ public class Session {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="session_id")
     private Long sessionsId;
-
-
     @ManyToOne
     @JoinColumn(name = "film_id",referencedColumnName = "film_id")
     private Film film;
@@ -22,4 +22,11 @@ public class Session {
     @JoinColumn(name = "saloon_id",referencedColumnName = "saloon_id")
     private Saloon saloon;
 
+    @JsonCreator
+    public Session(@JsonProperty("session_id") Long id) {
+        this.sessionsId = id;
+    }
+    public Session(){
+
+    }
 }

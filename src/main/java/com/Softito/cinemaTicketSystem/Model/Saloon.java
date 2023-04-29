@@ -22,7 +22,7 @@ public class Saloon {
     @Column(name = "capacity")
     private Long capacity;
     @JsonCreator
-    public Saloon(@JsonProperty("role_id") Long id) {
+    public Saloon(@JsonProperty("saloon_id") Long id) {
         this.saloonId = id;
     }
     public Saloon(){
