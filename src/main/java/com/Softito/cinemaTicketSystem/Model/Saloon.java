@@ -15,11 +15,9 @@ public class Saloon {
     private Long saloonId;
 
     @Column(name = "available")
-    private String isactive;
+    private Boolean available;
 
     @Column(name = "capacity")
     private Long capacity;
-
-
 
 }
