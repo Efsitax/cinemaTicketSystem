@@ -19,21 +19,21 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    public Role getRoleById(@PathVariable Long id) {
-        return service.getById(id);
-    }
+    public Role getRoleById(@PathVariable Long role_id) {
+        return service.getById(role_id);
+    }//id==role_id oldu
 
     @PostMapping("/add")
     public Role createRole(@RequestBody Role entity) {
         return service.create(entity);
     }
     @DeleteMapping("/delete/{id}")
-    public Boolean deleteRole(@PathVariable Long id) {
-        return service.delete(id);
-    }
+    public Boolean deleteRole(@PathVariable Long role_id) {
+        return service.delete(role_id);
+    }//id==role_id oldu
 
     @PutMapping("/update/{id}")
-    public Role updateRole(@PathVariable Long id, @RequestBody Role entity) {
-        return service.update(id, entity);
-    }
+    public Role updateRole(@PathVariable Long role_id, @RequestBody Role entity) {
+        return service.update(role_id, entity);
+    }//id==role_id oldu
 }

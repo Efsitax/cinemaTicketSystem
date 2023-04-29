@@ -17,9 +17,9 @@ public class RoleService implements IBaseService<Role> {
     }
 
     @Override
-    public Role getById(Long id) {
-        return roleRepository.findById(id).orElse(null);
-    }
+    public Role getById(Long role_id) {
+        return roleRepository.findById(role_id).orElse(null);
+    }//id==role_id
 
     @Override
     public Role create(Role entity) {
@@ -27,8 +27,8 @@ public class RoleService implements IBaseService<Role> {
     }
 
     @Override
-    public Role update(Long id, Role entity) {
-        Role existingRole = getById(id);
+    public Role update(Long role_id, Role entity) {//id==role_id oldu
+        Role existingRole = getById(role_id);//id=role_id oldu
         if (existingRole != null) {
             existingRole.setName(entity.getName());
             return roleRepository.save(existingRole);
@@ -37,7 +37,7 @@ public class RoleService implements IBaseService<Role> {
     }
 
     @Override
-    public boolean delete(Long id) {
+    public boolean delete(Long id) {//id==role_id
         if(getById(id)!=null){
             roleRepository.deleteById(id);
             return true;

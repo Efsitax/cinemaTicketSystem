@@ -1,6 +1,5 @@
 package com.Softito.cinemaTicketSystem.Model;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,9 +11,9 @@ import lombok.Setter;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="Id")
-    private Long Id;
-    @Column(name = "Name")
-    private String Name;
+    @Column(name="role_id")
+    private Long role_id;
+    @Column(name = "name")
+    private String name;
 
 }

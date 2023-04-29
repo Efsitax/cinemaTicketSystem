@@ -20,6 +20,8 @@ public class Film {
     @Column(name = "price")
     private String Price;
     @Column(name = "is_active")
-    private String isActive;
+    private Boolean isActive;
+
+
 
 }
