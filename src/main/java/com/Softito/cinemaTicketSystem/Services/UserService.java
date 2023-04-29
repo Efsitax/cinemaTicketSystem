@@ -1,50 +1,53 @@
 package com.Softito.cinemaTicketSystem.Services;
 
 import com.Softito.cinemaTicketSystem.Model.Session;
-import com.Softito.cinemaTicketSystem.Model.Ticket;
+import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Repository.SessionRepository;
-import com.Softito.cinemaTicketSystem.Repository.TicketRepository;
+import com.Softito.cinemaTicketSystem.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 @Service
-public class TicketService implements IBaseService<Ticket> {
+public class UserService implements IBaseService<User> {
 
     @Autowired
-    private TicketRepository repository;
+    private UserRepository repository;
+
     @Override
-    public List<Ticket> getAll() {
+    public List<User> getAll() {
         return repository.findAll();
     }
 
     @Override
-    public Ticket getById(Long id) {
+    public User getById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
-    public Ticket create(Ticket entity) {
+    public User create(User entity) {
         return repository.save(entity);
     }
 
     @Override
-    public Ticket update(Long id, Ticket entity) {
-        Ticket existingTicket = getById(id);
-        if (existingTicket != null) {
-            existingTicket.setUser(entity.getUser());
-            existingTicket.setSession(entity.getSession());
-            return repository.save(existingTicket);
+    public User update(Long id, User entity) {
+        User existingUser = getById(id);
+        if (existingUser != null) {
+            existingUser.setRole(entity.getRole());
+            return repository.save(existingUser);
         }
         return null;
     }
+
     @Override
     public boolean delete(Long id) {
-        if(getById(id)!=null){
+        if (getById(id) != null) {
             repository.deleteById(id);
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
