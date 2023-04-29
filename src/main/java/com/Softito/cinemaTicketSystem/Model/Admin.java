@@ -3,6 +3,7 @@ package com.Softito.cinemaTicketSystem.Model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ public class Admin {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email",unique = true)
     private String email;
 
     @Column(name = "password")
@@ -31,10 +32,11 @@ public class Admin {
     private String token;
 
 
-    @Column(name = "photo")
-    private String photo;
+    @Column(name = "photo", columnDefinition = "image")
+    private byte[] photo;
 
     @Column(name = "is_active")
+    @NotNull
     private Boolean isActive;
 
 

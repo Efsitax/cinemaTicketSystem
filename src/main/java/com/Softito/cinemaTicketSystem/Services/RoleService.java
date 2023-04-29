@@ -9,21 +9,21 @@ import java.util.List;
 @Service
 public class RoleService implements IBaseService<Role> {
     @Autowired
-    private RoleRepository roleRepository;
+    private RoleRepository repository;
 
     @Override
     public List<Role> getAll() {
-        return roleRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public Role getById(Long role_id) {
-        return roleRepository.findById(role_id).orElse(null);
+        return repository.findById(role_id).orElse(null);
     }//id==role_id
 
     @Override
     public Role create(Role entity) {
-        return roleRepository.save(entity);
+        return repository.save(entity);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class RoleService implements IBaseService<Role> {
         Role existingRole = getById(role_id);//id=role_id oldu
         if (existingRole != null) {
             existingRole.setName(entity.getName());
-            return roleRepository.save(existingRole);
+            return repository.save(existingRole);
         }
         return null;
     }
@@ -39,7 +39,7 @@ public class RoleService implements IBaseService<Role> {
     @Override
     public boolean delete(Long id) {//id==role_id
         if(getById(id)!=null){
-            roleRepository.deleteById(id);
+            repository.deleteById(id);
             return true;
         }
         else{
