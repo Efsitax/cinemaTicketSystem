@@ -1,5 +1,7 @@
 package com.Softito.cinemaTicketSystem.Model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +21,12 @@ public class Saloon {
 
     @Column(name = "capacity")
     private Long capacity;
+    @JsonCreator
+    public Saloon(@JsonProperty("role_id") Long id) {
+        this.saloonId = id;
+    }
+    public Saloon(){
+
+    }
 
 }
