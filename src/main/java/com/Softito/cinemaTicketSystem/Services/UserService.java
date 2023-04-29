@@ -36,7 +36,14 @@ public class UserService implements IBaseService<User> {
     public User update(Long id, User entity) {
         User existingUser = getById(id);
         if (existingUser != null) {
-            existingUser.setRole(entity.getRole());
+            existingUser.setUpdated_at(entity.getUpdated_at());
+            existingUser.setName(entity.getName());
+            existingUser.setBalance(entity.getBalance());
+            existingUser.setSurname(entity.getSurname());
+            existingUser.setEmail(entity.getEmail());
+            existingUser.setPassword(entity.getPassword());
+            existingUser.setPhoto(entity.getPhoto());
+            existingUser.setIsActive(entity.getIsActive());
             return repository.save(existingUser);
         }
         return null;

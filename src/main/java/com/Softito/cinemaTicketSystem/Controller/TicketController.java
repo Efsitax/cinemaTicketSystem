@@ -4,13 +4,14 @@ import com.Softito.cinemaTicketSystem.Model.Session;
 import com.Softito.cinemaTicketSystem.Model.Ticket;
 import com.Softito.cinemaTicketSystem.Services.SessionService;
 import com.Softito.cinemaTicketSystem.Services.TicketService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
-
+    @Autowired
     private TicketService service ;
 
     @GetMapping("")

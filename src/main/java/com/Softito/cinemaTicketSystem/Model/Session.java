@@ -14,7 +14,7 @@ public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="session_id")
-    private Long sessionsId;
+    private Long sessionId;
     @ManyToOne
     @JoinColumn(name = "film_id",referencedColumnName = "film_id")
     private Film film;
@@ -24,7 +24,7 @@ public class Session {
 
     @JsonCreator
     public Session(@JsonProperty("session_id") Long id) {
-        this.sessionsId = id;
+        this.sessionId = id;
     }
     public Session(){
 

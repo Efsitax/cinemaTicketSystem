@@ -34,6 +34,7 @@ public class TicketService implements IBaseService<Ticket> {
         if (existingTicket != null) {
             existingTicket.setUser(entity.getUser());
             existingTicket.setSession(entity.getSession());
+            existingTicket.setSeatNum(entity.getSeatNum());
             return repository.save(existingTicket);
         }
         return null;

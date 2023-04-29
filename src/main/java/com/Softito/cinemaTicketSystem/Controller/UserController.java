@@ -4,6 +4,7 @@ import com.Softito.cinemaTicketSystem.Model.Ticket;
 import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Services.TicketService;
 import com.Softito.cinemaTicketSystem.Services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    @Autowired
     private UserService service ;
 
     @GetMapping("")
