@@ -1,4 +1,4 @@
-package com.Softito.cinemaTicketSystem.Controller;
+package com.Softito.cinemaTicketSystem.RestController;
 
 import com.Softito.cinemaTicketSystem.Model.Role;
 import com.Softito.cinemaTicketSystem.Services.RoleService;

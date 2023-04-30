@@ -1,4 +1,4 @@
-package com.Softito.cinemaTicketSystem.Controller;
+package com.Softito.cinemaTicketSystem.RestController;
 
 import com.Softito.cinemaTicketSystem.Model.Session;
 import com.Softito.cinemaTicketSystem.Services.SessionService;

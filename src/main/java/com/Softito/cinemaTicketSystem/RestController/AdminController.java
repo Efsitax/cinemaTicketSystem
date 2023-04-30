@@ -1,8 +1,7 @@
-package com.Softito.cinemaTicketSystem.Controller;
+package com.Softito.cinemaTicketSystem.RestController;
 
 import com.Softito.cinemaTicketSystem.Model.Admin;
 import com.Softito.cinemaTicketSystem.Services.AdminService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
