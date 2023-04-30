@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-......" crossorigin="anonymous" />
+	<style>
+		body {
+			background-color: #343a40;
+		}
+	</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Cinema Ticket Managment System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../../../../../Downloads/site/site/cinema-world/home.html"><i class="fa fa-home">Home</i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="films.html"><i class="fa fa-film">Films</i></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../../../../../Downloads/site/site/cinema-world/login.html"><i class="fa fa-user">Log in</i></a>
+            </li>
+          </ul>
+        </div>
+      </nav> 
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 mx-auto">
+				<div class="card mt-5">
+					<div class="card-header">
+						<h4>Register</h4>
+					</div>
+					<div class="card-body">
+						<form method="post" action="/saveUser">
+							<div class="form-group">
+								<label for="name">Name</label>
+								<input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+							</div>
+							<div class="form-group">
+								<label for="surname">Surname</label>
+								<input type="text" class="form-control" id="surname" name="surname" placeholder="Enter Surname">
+							</div>
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+							</div>
+							
+							<div class="form-group">
+								<label for="password1">Password</label>
+								<input type="password" class="form-control" id="password1" name="password" placeholder="Password">
+							</div>
+                            <div class="form-group">
+								<label for="password2">Password Tekrar</label>
+								<input type="password" class="form-control" id="password2" placeholder="Password">
+							</div>
+
+							<button type="submit" class="btn btn-primary">Register</button>
+							<button id="login-btn" class="btn btn-secondary">Log in</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+      
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<script>
+        const password1 = document.getElementById("password1");
+        const password2 = document.getElementById("password2");
+        
+        document.querySelector("form").addEventListener("submit", function(event) {
+          if (password1.value !== password2.value) {
+            alert("Şifreler Aynı Değil");
+            window.location.href = 'register';
+            event.preventDefault();
+          }
+        });
+
+		$(function(){
+			$('#login-btn').click(function(){
+				window.location.href = 'login';
+				return false;
+			});
+		});
+	</script>
+
+</body>
+</html>
