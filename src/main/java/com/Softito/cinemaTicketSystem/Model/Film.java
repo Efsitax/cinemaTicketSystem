@@ -2,7 +2,7 @@ package com.Softito.cinemaTicketSystem.Model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +23,8 @@ public class Film {
     private String Price;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "description", columnDefinition = "text")
+    private String description;
     @JsonCreator
     public Film(@JsonProperty("film_id") Long id) {
         this.filmId = id;

@@ -1,9 +1,9 @@
 package com.Softito.cinemaTicketSystem.Model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.antlr.v4.runtime.misc.NotNull;
+
 
 @Entity
 @Getter
@@ -35,8 +35,7 @@ public class Admin {
     @Column(name = "photo", columnDefinition = "image")
     private byte[] photo;
 
-    @Column(name = "is_active")
-    @NotNull
+    @Column(name = "is_active",nullable = false)
     private Boolean isActive;
 
 
