@@ -1,7 +1,6 @@
 package com.Softito.cinemaTicketSystem.Services;
 
 import com.Softito.cinemaTicketSystem.Model.Film;
-import com.Softito.cinemaTicketSystem.Model.Role;
 import com.Softito.cinemaTicketSystem.Repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
