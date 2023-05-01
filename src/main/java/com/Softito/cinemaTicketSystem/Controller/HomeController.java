@@ -5,16 +5,14 @@ import com.Softito.cinemaTicketSystem.Model.Film;
 import com.Softito.cinemaTicketSystem.Model.Role;
 import com.Softito.cinemaTicketSystem.Model.Session;
 import com.Softito.cinemaTicketSystem.Model.User;
-import com.Softito.cinemaTicketSystem.Services.SaloonService;
-import com.Softito.cinemaTicketSystem.Services.SessionService;
-import com.Softito.cinemaTicketSystem.Services.TicketService;
-import com.Softito.cinemaTicketSystem.Services.UserService;
+import com.Softito.cinemaTicketSystem.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -37,9 +35,12 @@ public class HomeController {
     private SaloonService saloonService;
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private FilmService filmService;
+
     private int token = 0;
     private User user;
-    List<Session> sessions = sessionService.getAll();
+
 
     public HomeController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -76,10 +77,15 @@ public class HomeController {
             return "redirect:/login";
         }
     }
-    @GetMapping("/sessions")
-    public String sessions(Model model){
+    @GetMapping("/session/{id}")
+    public String sessions(@PathVariable Long id, Model model) {
 
-        List<Film>
+        Film films = filmService.getById(id);
+        model.addAttribute("films",films);
+        model.addAttribute("token", token);
+        List<Session> sessions = sessionService.getAll();
+        model.addAttribute("sessions",sessions);
+        return "sessions";
     }
     @PostMapping("/saveUser")
     public String saveUser(
