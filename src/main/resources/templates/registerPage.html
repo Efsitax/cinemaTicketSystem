@@ -43,7 +43,7 @@
 						<h4>Register</h4>
 					</div>
 					<div class="card-body">
-						<form method="post" action="/saveUser" th:object="${user}">
+						<form method="post" action="/saveUser">
 							<div class="form-group">
 								<label for="name">Name</label>
 								<input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
@@ -55,14 +55,13 @@
 							<div class="form-group">
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
-								<span class="text-warning" id="erroremail "th:text="${emailError}"></span>
 							</div>
 							<div class="form-group">
 								<label for="password1">Password</label>
 								<input type="password" class="form-control" id="password1" name="password" placeholder="Password">
 							</div>
                             <div class="form-group">
-								<label for="password2">Password Tekrar</label>
+								<label for="password2">Password Again</label>
 								<input type="password" class="form-control" id="password2" placeholder="Password">
 							</div>
 

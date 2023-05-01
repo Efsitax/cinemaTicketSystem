@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -28,7 +27,7 @@ public class HomeController {
     private final RestTemplate restTemplate;
     @Autowired
     private UserService service;
-    private String token;
+    private int token = 0;
     private User user;
 
     public HomeController(RestTemplate restTemplate) {
@@ -39,29 +38,42 @@ public class HomeController {
     public String getAllFilms(Model model) {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("films", films);
+        model.addAttribute("token", token);
         return "filmsPage";
     }
+
     @GetMapping("/register")
-    public String register(){
+    public String register(Model model) {
+        model.addAttribute("token", token);
         return "registerPage";
     }
+
     @GetMapping("/success")
-    public String success(){
+    public String success() {
         return "success";
     }
+
     @GetMapping("/login")
-    public String login(){
+    public String login(Model model) {
+        model.addAttribute("token", token);
         return "loginPage";
     }
 
+    @GetMapping("/isLogged")
+    public String isLogged() {
+        if (token==1) {
+            return "satis";
+        } else return "redirect:/login";
+    }
+
     @PostMapping("/saveUser")
-    public String saveUser(@RequestParam("name") String name,
-                           @RequestParam("surname") String surname,
-                           @RequestParam("email") String email,
-                           @RequestParam("password") String password,
-                           BindingResult result,
-                           Model model) {
-        if(!service.isEmailExist(email)){
+    public String saveUser(
+            @RequestParam("name") String name,
+            @RequestParam("surname") String surname,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            Model model) throws IOException {
+        if (!service.isEmailExist(email)) {
             User newUser = new User();
             newUser.setName(name);
             newUser.setSurname(surname);
@@ -93,32 +105,37 @@ public class HomeController {
                     String.class
             );
             return "redirect:/login";
-        }
-        else{
-            result.rejectValue("emailError",null,"This email already exist.");
+        } else {
+            model.addAttribute("emailError","Bu email zaten var");
             return "redirect:/register";
         }
-
     }
+
     @PostMapping("/loginUser")
     public String loginUser(
-                           @RequestParam("email") String email,
-                           @RequestParam("password") String password) {
-        if(service.isEmailExist(email)){
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
+        if (service.isEmailExist(email)) {
             user = service.getByEmail(email);
-            if(user.getPassword().equals(password)){
+            if (user.getPassword().equals(password)) {
                 user.setToken("1");
-                token = user.getToken();
+                token = 1;
                 service.update(user.getUserId(), user);
                 return "redirect:/filmsPage";
-            }
-            else{
+            } else {
                 return "redirect:/login";
             }
-        }
-        else{
+        } else {
             return "redirect:/login";
         }
 
+    }
+
+    @GetMapping("/logoutUser")
+    public String logoutUser() {
+        user.setToken("0");
+        token = 0;
+        service.update(user.getUserId(), user);
+        return "redirect:/filmsPage";
     }
 }
