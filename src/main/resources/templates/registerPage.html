@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<title>Register</title>
@@ -31,7 +32,8 @@
             </li>
           </ul>
         </div>
-      </nav> 
+      </nav>
+
 
 	<div class="container">
 		<div class="row">
@@ -41,7 +43,7 @@
 						<h4>Register</h4>
 					</div>
 					<div class="card-body">
-						<form method="post" action="/saveUser">
+						<form method="post" action="/saveUser" th:object="${user}">
 							<div class="form-group">
 								<label for="name">Name</label>
 								<input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
@@ -53,8 +55,8 @@
 							<div class="form-group">
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+								<span class="text-warning" id="erroremail "th:text="${emailError}"></span>
 							</div>
-							
 							<div class="form-group">
 								<label for="password1">Password</label>
 								<input type="password" class="form-control" id="password1" name="password" placeholder="Password">
@@ -72,26 +74,35 @@
 			</div>
 		</div>
 	</div>
-      
+
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-	<script>
+	<script th:inline="javascript">
         const password1 = document.getElementById("password1");
         const password2 = document.getElementById("password2");
         
         document.querySelector("form").addEventListener("submit", function(event) {
           if (password1.value !== password2.value) {
             alert("Şifreler Aynı Değil");
-            window.location.href = 'register';
+            window.location.href = 'registerPage';
             event.preventDefault();
           }
         });
+         var errorMessage = [[${emailError}]];
+
+        // If the error message is not empty, display an alert
+        if (errorMessage !== null) {
+            alert(errorMessage);
+            window.location.href = 'register';
+            event.preventDefault();
+
+        }
 
 		$(function(){
 			$('#login-btn').click(function(){
-				window.location.href = 'login';
+				window.location.href = 'loginPage';
 				return false;
 			});
 		});

@@ -4,10 +4,12 @@ package com.Softito.cinemaTicketSystem.Controller;
 import com.Softito.cinemaTicketSystem.Model.Film;
 import com.Softito.cinemaTicketSystem.Model.Role;
 import com.Softito.cinemaTicketSystem.Model.User;
+import com.Softito.cinemaTicketSystem.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +26,10 @@ import java.util.List;
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
+    @Autowired
+    private UserService service;
+    private String token;
+    private User user;
 
     public HomeController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -37,7 +43,7 @@ public class HomeController {
     }
     @GetMapping("/register")
     public String register(){
-        return "register";
+        return "registerPage";
     }
     @GetMapping("/success")
     public String success(){
@@ -45,45 +51,74 @@ public class HomeController {
     }
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "loginPage";
     }
+
     @PostMapping("/saveUser")
     public String saveUser(@RequestParam("name") String name,
                            @RequestParam("surname") String surname,
                            @RequestParam("email") String email,
                            @RequestParam("password") String password,
-                           Model model) throws IOException {
-        User newUser = new User();
-        newUser.setName(name);
-        newUser.setSurname(surname);
-        newUser.setEmail(email);
-        newUser.setPassword(password);
-        newUser.setBalance(100L);
-        newUser.setIsActive(true);
-        // Get the current date
-        LocalDate currentDate = LocalDate.now();
+                           BindingResult result,
+                           Model model) {
+        if(!service.isEmailExist(email)){
+            User newUser = new User();
+            newUser.setName(name);
+            newUser.setSurname(surname);
+            newUser.setEmail(email);
+            newUser.setPassword(password);
+            newUser.setBalance(100L);
+            newUser.setIsActive(true);
+            // Get the current date
+            LocalDate currentDate = LocalDate.now();
 
-        // Format the date in "yyyy-MM-dd" format
-        String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            // Format the date in "yyyy-MM-dd" format
+            String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        // Convert the formatted date to a java.util.Date object
-        Date date = java.sql.Date.valueOf(formattedDate);
+            // Convert the formatted date to a java.util.Date object
+            Date date = java.sql.Date.valueOf(formattedDate);
 
-        newUser.setCreated_at(date);
-        newUser.setRole(new Role(2L));
+            newUser.setCreated_at(date);
+            newUser.setRole(new Role(2L));
 
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<User> entity = new HttpEntity<>(newUser, headers);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<User> entity = new HttpEntity<>(newUser, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:8080/users/add",
-                HttpMethod.POST,
-                entity,
-                String.class
-        );
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "http://localhost:8080/users/add",
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+            return "redirect:/login";
+        }
+        else{
+            result.rejectValue("emailError",null,"This email already exist.");
+            return "redirect:/register";
+        }
 
-        return "redirect:/login";
+    }
+    @PostMapping("/loginUser")
+    public String loginUser(
+                           @RequestParam("email") String email,
+                           @RequestParam("password") String password) {
+        if(service.isEmailExist(email)){
+            user = service.getByEmail(email);
+            if(user.getPassword().equals(password)){
+                user.setToken("1");
+                token = user.getToken();
+                service.update(user.getUserId(), user);
+                return "redirect:/filmsPage";
+            }
+            else{
+                return "redirect:/login";
+            }
+        }
+        else{
+            return "redirect:/login";
+        }
+
     }
 }
