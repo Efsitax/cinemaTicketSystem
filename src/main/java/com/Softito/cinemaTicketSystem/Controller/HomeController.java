@@ -3,7 +3,11 @@ package com.Softito.cinemaTicketSystem.Controller;
 
 import com.Softito.cinemaTicketSystem.Model.Film;
 import com.Softito.cinemaTicketSystem.Model.Role;
+import com.Softito.cinemaTicketSystem.Model.Session;
 import com.Softito.cinemaTicketSystem.Model.User;
+import com.Softito.cinemaTicketSystem.Services.SaloonService;
+import com.Softito.cinemaTicketSystem.Services.SessionService;
+import com.Softito.cinemaTicketSystem.Services.TicketService;
 import com.Softito.cinemaTicketSystem.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -26,9 +30,16 @@ public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
     @Autowired
-    private UserService service;
+    private UserService userService;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private SaloonService saloonService;
+    @Autowired
+    private SessionService sessionService;
     private int token = 0;
     private User user;
+    List<Session> sessions = sessionService.getAll();
 
     public HomeController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -48,10 +59,6 @@ public class HomeController {
         return "registerPage";
     }
 
-    @GetMapping("/success")
-    public String success() {
-        return "success";
-    }
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -60,20 +67,28 @@ public class HomeController {
     }
 
     @GetMapping("/isLogged")
-    public String isLogged() {
+    public String isLogged(Model model) {
         if (token==1) {
+            Long capacity = saloonService.getCapacity(1L);
+            model.addAttribute("capacity",capacity);
             return "satis";
-        } else return "redirect:/login";
+        } else {
+            return "redirect:/login";
+        }
     }
+    @GetMapping("/sessions")
+    public String sessions(Model model){
 
+        List<Film>
+    }
     @PostMapping("/saveUser")
     public String saveUser(
             @RequestParam("name") String name,
             @RequestParam("surname") String surname,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            Model model) throws IOException {
-        if (!service.isEmailExist(email)) {
+            Model model) {
+        if (!userService.isEmailExist(email)) {
             User newUser = new User();
             newUser.setName(name);
             newUser.setSurname(surname);
@@ -115,12 +130,12 @@ public class HomeController {
     public String loginUser(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        if (service.isEmailExist(email)) {
-            user = service.getByEmail(email);
+        if (userService.isEmailExist(email)) {
+            user = userService.getByEmail(email);
             if (user.getPassword().equals(password)) {
                 user.setToken("1");
                 token = 1;
-                service.update(user.getUserId(), user);
+                userService.update(user.getUserId(), user);
                 return "redirect:/filmsPage";
             } else {
                 return "redirect:/login";
@@ -135,7 +150,7 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-        service.update(user.getUserId(), user);
+        userService.update(user.getUserId(), user);
         return "redirect:/filmsPage";
     }
 }

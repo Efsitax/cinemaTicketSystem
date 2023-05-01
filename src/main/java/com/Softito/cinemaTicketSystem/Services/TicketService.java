@@ -5,6 +5,7 @@ import com.Softito.cinemaTicketSystem.Repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class TicketService implements IBaseService<Ticket> {
@@ -46,5 +47,16 @@ public class TicketService implements IBaseService<Ticket> {
         else{
             return false;
         }
+    }
+
+    public List<Ticket> getTicketsBySessionId(Long sessionId) {
+        return repository.findAllBySessionSessionId(sessionId);
+    }
+    public List<Long> getSeatNums(List<Ticket> tickets){
+        List<Long> seatNums = new ArrayList<>();
+        for(Ticket ticket:tickets){
+            seatNums.add(ticket.getSeatNum());
+        }
+        return seatNums;
     }
 }

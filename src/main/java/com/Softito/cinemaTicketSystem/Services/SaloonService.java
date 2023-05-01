@@ -46,4 +46,8 @@ public class SaloonService implements IBaseService<Saloon>{
                 return false;
             }
     }
+    public Long getCapacity(Long id){
+        Saloon saloon=getById(id);
+        return saloon.getCapacity();
+    }
 }
