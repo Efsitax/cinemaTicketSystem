@@ -25,10 +25,10 @@
 			  <a class="nav-link" href="../../../../../../../../Downloads/site/site/cinema-world/home.html"><i class="fa fa-home">Home</i></a>
 			</li>
 			<li class="nav-item">
-			  <a class="nav-link" href="films.html"><i class="fa fa-film">Films</i></a>
+			  <a class="nav-link" href="filmsPage"><i class="fa fa-film">Films</i></a>
 			</li>
 			<li class="nav-item">
-			  <a class="nav-link" href="login.html"><i class="fa fa-user">Log in</i></a>
+			  <a class="nav-link" href="login"><i class="fa fa-user">Log in</i></a>
 			</li>
 		  </ul>
 		</div>
@@ -42,14 +42,14 @@
 						<h4>Login</h4>
 					</div>
 					<div class="card-body">
-						<form>
+						<form method="post" action="/loginUser">
 							<div class="form-group">
 								<label for="email">Email</label>
-								<input type="email" class="form-control" id="email" placeholder="Enter email">
+								<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
 							</div>
 							<div class="form-group">
 								<label for="password">Password</label>
-								<input type="password" class="form-control" id="password" placeholder="Password">
+								<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 							</div>
 							<button type="submit" class="btn btn-primary">Login</button>
 							<button id="register-btn" class="btn btn-secondary">Kayıt Ol</button>
@@ -67,7 +67,7 @@
 	<script>
 		$(function(){
 			$('#register-btn').click(function(){
-				window.location.href = 'register.html';
+				window.location.href = 'register';
 				return false;
 			});
 		});
