@@ -52,7 +52,7 @@
         </div>
         <div th:each="film : ${films}" class="col-sm-4 pt-5">
           <div class="card">
-            <a href="index.html"><img class="card-img-top" src="../../../../../../../../Downloads/site/site/cinema-world/images/1page-img3.jpg" alt="Movie 1"></a>
+            <a href="index.html"><img class="card-img-top" th:src="@{'data:image/png;base64,'+${film.image}} " /></a>
             <div class="card-body">
               <h5 class="card-title text-dark" th:text="${film.name}">Movie</h5>
               <p class="card-text text-dark"  name="detail" th:text="${film.description}">Lorem Ipsum<a href="#detail">Devamı</a></p>
@@ -60,7 +60,7 @@
 
             </div>
           </div>
-        </div>
+        </div>>
         <!--<div class="col-sm-4">
           <div class="card">
             <img class="card-img-top" src="../../../../../../../../Downloads/site/site/cinema-world/images/1page-img4.jpg" alt="Movie 2">

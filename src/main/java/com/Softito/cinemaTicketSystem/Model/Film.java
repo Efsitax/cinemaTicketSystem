@@ -25,6 +25,9 @@ public class Film {
     private Boolean isActive;
     @Column(name = "description", columnDefinition = "text")
     private String description;
+    @Lob
+    @Column(name = "photo", length = Integer.MAX_VALUE, nullable = true)
+    private byte[] image;
     @JsonCreator
     public Film(@JsonProperty("film_id") Long id) {
         this.filmId = id;
