@@ -90,7 +90,8 @@ public class HomeController {
         model.addAttribute("img",base64Data);
         model.addAttribute("token", token);
 
-        List<Session> session = sessionService.getAll();
+        List<Session> session = sessionService.getAll().stream().filter(s -> s.getFilm().getFilmId() == id)
+                .collect(Collectors.toList());;
 
         model.addAttribute("sessionS", session);
 
