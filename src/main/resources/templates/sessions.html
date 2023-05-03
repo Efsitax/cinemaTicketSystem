@@ -30,34 +30,47 @@
     </div>
 </nav>
 <div class="jumbotron jumbotron-fluid bg-dark text-light">
+
     <div class="container">
         <div class="row">
-            <div class="col-6 pt-2">
-                <img class="float-right col-6" src="/static/images/banner-img.png" alt="" width="250px">
-            </div>
-            <hr class="my-4">
-            <img class="card-img-top" th:src="@{'data:image/png;base64,'+${films.image}} " >
-            <div th:each="film : ${films}" class="col-sm-4 pt-5">
-                <div class="card">
-                    <a href="index.html"><img class="card-img-top" th:src="@{'data:image/png;base64,'+${films.image}} " /></a>
-                    <div class="card-body">
-                        <h5 class="card-title text-dark" th:text="${film.name}">Movie</h5>
-                        <p class="card-text text-dark"  name="detail" th:text="${film.description}">Lorem Ipsum<a href="#detail">Devamı</a></p>
-                        <a href="/isLogged" class="btn btn-primary">Buy Ticket</a>
-                    </div>
-                </div>
-            </div>
-            <div th:each="sessions : ${sessions}" >
-                <p th:if="${sessions.film.filmId==films.filmId}" class="card-text text-white" name="detail" th:text="${sessions.sessionId}">Lorem Ipsum</p>
-                <p th:if="${sessions.film.filmId==films.filmId}" class="card-text text-white" name="detail" th:text="${sessions.film.name}">Lorem Ipsum</p>
-                <p th:if="${sessions.film.filmId==films.filmId}" class="card-text text-white" name="detail" th:text="${sessions.saloon.saloonId}">Lorem Ipsum</p>
-            </div>
+            <img class="card-img-top col-3" th:src="@{'data:image/png;base64,'+${img}} " />
+            <div class="row col-6">
+                <h1 class="col-3" th:text="${film.name}"></h1>
+                <p class="col-12" th:text="${film.description}"></p>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
+        <div class="col-12">
+            <table class="table text-warning">
+                <thead>
+                <tr>
+                    <th>Session Id</th>
+                    <th>Film Id</th>
+                    <th>Saloon Id</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sessions : ${session}">
+                    <td th:text="${sessions.sessionId}"></td>
+                    <td th:text="${sessions.film.filmId}"></td>
+                    <td th:text="${sessions.saloon.saloonId}"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
     </div>
+
+
+
+
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>

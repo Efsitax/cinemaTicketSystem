@@ -6,7 +6,9 @@ import com.Softito.cinemaTicketSystem.Model.Role;
 import com.Softito.cinemaTicketSystem.Model.Session;
 import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Services.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +22,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -69,24 +71,31 @@ public class HomeController {
 
     @GetMapping("/isLogged")
     public String isLogged(Model model) {
-        if (token==1) {
+        if (token == 1) {
             Long capacity = saloonService.getCapacity(1L);
-            model.addAttribute("capacity",capacity);
+            model.addAttribute("capacity", capacity);
             return "satis";
         } else {
             return "redirect:/login";
         }
     }
+
     @GetMapping("/session/{id}")
     public String sessions(@PathVariable Long id, Model model) {
+        Film film = restTemplate.getForObject("http://localhost:8080/films/"+id, Film.class );
+        model.addAttribute("film", film);
 
-        Film films = filmService.getById(id);
-        model.addAttribute("films",films);
+        byte [] img=filmService.getById(id).getImage();
+        String base64Data = Base64.getEncoder().encodeToString(img);
+        model.addAttribute("img",base64Data);
         model.addAttribute("token", token);
-        List<Session> sessions = sessionService.getAll();
-        model.addAttribute("sessions",sessions);
+
+        List<Session> session = sessionService.getAll();
+        model.addAttribute("session", session);
+
         return "sessions";
     }
+
     @PostMapping("/saveUser")
     public String saveUser(
             @RequestParam("name") String name,
@@ -114,7 +123,6 @@ public class HomeController {
             newUser.setCreated_at(date);
             newUser.setRole(new Role(2L));
 
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<User> entity = new HttpEntity<>(newUser, headers);
@@ -127,7 +135,7 @@ public class HomeController {
             );
             return "redirect:/login";
         } else {
-            model.addAttribute("emailError","Bu email zaten var");
+            model.addAttribute("emailError", "Bu email zaten var");
             return "redirect:/register";
         }
     }
