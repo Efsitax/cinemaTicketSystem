@@ -91,7 +91,8 @@ public class HomeController {
         model.addAttribute("token", token);
 
         List<Session> session = sessionService.getAll();
-        model.addAttribute("session", session);
+
+        model.addAttribute("sessionS", session);
 
         return "sessions";
     }

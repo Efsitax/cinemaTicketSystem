@@ -49,13 +49,15 @@
                     <th>Session Id</th>
                     <th>Film Id</th>
                     <th>Saloon Id</th>
+                    <th>Buy Ticket</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="sessions : ${session}">
+                <tr th:each="sessions : ${sessionS}">
                     <td th:text="${sessions.sessionId}"></td>
                     <td th:text="${sessions.film.filmId}"></td>
                     <td th:text="${sessions.saloon.saloonId}"></td>
+                    <td> <a th:href="@{/isLogged}" class="btn btn-primary">Buy</a></td>
                 </tr>
 
                 </tbody>
