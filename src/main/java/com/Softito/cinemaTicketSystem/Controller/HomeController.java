@@ -83,6 +83,7 @@ public class HomeController {
             newUser.setSurname(surname);
             newUser.setEmail(email);
             newUser.setPassword(password);
+            //newUser.setPassword(passwordEncoder.encode(password)); Şifre şifreleniyor
             newUser.setBalance(100L);
             newUser.setIsActive(true);
             // Get the current date
