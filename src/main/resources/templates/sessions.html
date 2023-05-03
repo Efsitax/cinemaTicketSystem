@@ -57,7 +57,7 @@
                     <td th:text="${sessions.sessionId}"></td>
                     <td th:text="${sessions.film.filmId}"></td>
                     <td th:text="${sessions.saloon.saloonId}"></td>
-                    <td> <a th:href="@{/isLogged}" class="btn btn-primary">Buy</a></td>
+                    <td> <a th:href="@{/isLogged/{id}(id=${sessions.sessionId})}" class="btn btn-primary">Buy</a></td>
                 </tr>
 
                 </tbody>

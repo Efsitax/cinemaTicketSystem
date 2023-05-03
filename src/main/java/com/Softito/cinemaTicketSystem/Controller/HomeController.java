@@ -69,11 +69,13 @@ public class HomeController {
         return "loginPage";
     }
 
-    @GetMapping("/isLogged")
-    public String isLogged(Model model) {
+    @GetMapping("/isLogged/{id}")
+    public String isLogged(@PathVariable Long id,Model model) {
         if (token == 1) {
-            Long capacity = saloonService.getCapacity(1L);
+            Long a=sessionService.getById(id).getSaloon().getSaloonId();
+            Long capacity = saloonService.getCapacity(a);
             model.addAttribute("capacity", capacity);
+            model.addAttribute("ticket",ticketService);
             return "satis";
         } else {
             return "redirect:/login";
