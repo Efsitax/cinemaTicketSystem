@@ -53,11 +53,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="sessions : ${sessionS}">
-                    <td th:text="${sessions.sessionId}"></td>
-                    <td th:text="${sessions.film.filmId}"></td>
-                    <td th:text="${sessions.saloon.saloonId}"></td>
-                    <td> <a th:href="@{/isLogged/{id}(id=${sessions.sessionId})}" class="btn btn-primary">Buy</a></td>
+                <tr th:each="ses : ${reqSessions}">
+                    <td th:text="${ses.sessionId}"></td>
+                    <td th:text="${ses.film.filmId}"></td>
+                    <td th:text="${ses.saloon.saloonId}"></td>
+                    <td> <a th:href="@{/isLogged/{id}(id=${ses.sessionId})}" class="btn btn-primary">Buy</a></td>
                 </tr>
 
                 </tbody>

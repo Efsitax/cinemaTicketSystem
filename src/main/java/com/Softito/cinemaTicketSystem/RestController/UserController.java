@@ -2,11 +2,12 @@ package com.Softito.cinemaTicketSystem.RestController;
 
 import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -23,7 +24,14 @@ public class UserController {
     public User getUserById(@PathVariable Long id) {
         return service.getById(id);
     }
-
+    @GetMapping("/isemailexist")
+    public Boolean isEmailexist(@RequestParam String email) {
+        return service.getByEmail(email) != null;
+    }
+    @GetMapping("/email")
+    public User getUserByEmail(@RequestParam String email) {
+        return service.getByEmail(email);
+    }
 
     @PostMapping("/add")
     public User createUser(@RequestBody User entity) {

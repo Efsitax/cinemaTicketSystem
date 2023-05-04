@@ -22,6 +22,10 @@ public class SaloonController {
     public Saloon getSaloonById(@PathVariable Long id) {
         return service.getById(id);
     }
+    @GetMapping("/capacity/{id}")
+    public Long getCapcity(@PathVariable Long id) {
+        return service.getCapacity(id);
+    }
 
     @PostMapping("/add")
     public Saloon createSaloon(@RequestBody Saloon entity) {

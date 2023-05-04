@@ -1,15 +1,13 @@
 package com.Softito.cinemaTicketSystem.Controller;
 
 
-import com.Softito.cinemaTicketSystem.Model.Film;
-import com.Softito.cinemaTicketSystem.Model.Role;
-import com.Softito.cinemaTicketSystem.Model.Session;
-import com.Softito.cinemaTicketSystem.Model.User;
+import com.Softito.cinemaTicketSystem.Model.*;
 import com.Softito.cinemaTicketSystem.Services.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,16 +27,6 @@ import java.util.stream.Collectors;
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private TicketService ticketService;
-    @Autowired
-    private SaloonService saloonService;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private FilmService filmService;
 
     private int token = 0, hata=0;
     private User user;
@@ -87,10 +75,11 @@ public class HomeController {
     @GetMapping("/isLogged/{id}")
     public String isLogged(@PathVariable Long id,Model model) {
         if (token == 1) {
-            Long a=sessionService.getById(id).getSaloon().getSaloonId();
-            Long capacity = saloonService.getCapacity(a);
+            Session session = restTemplate.getForObject("http://localhost:8080/sessions/"+id, Session.class );
+            //Long SID=session.getSaloon().getSaloonId();
+            Long capacity = session.getSaloon().getCapacity();
             model.addAttribute("capacity", capacity);
-            model.addAttribute("ticket",ticketService);
+            //model.addAttribute("ticket",ticketService);
             return "satis";
         } else {
             return "redirect:/login";
@@ -102,15 +91,20 @@ public class HomeController {
         Film film = restTemplate.getForObject("http://localhost:8080/films/"+id, Film.class );
         model.addAttribute("film", film);
 
-        byte [] img=filmService.getById(id).getImage();
+        byte [] img=film.getImage();
         String base64Data = Base64.getEncoder().encodeToString(img);
         model.addAttribute("img",base64Data);
         model.addAttribute("token", token);
 
-        List<Session> session = sessionService.getAll().stream().filter(s -> s.getFilm().getFilmId() == id)
+        List<Session> allSessions = restTemplate.exchange(
+                "http://localhost:8080/sessions",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Session>>() {}).getBody();
+        List<Session> sessions = allSessions.stream().filter(s -> s.getFilm().getFilmId() == id)
                 .collect(Collectors.toList());;
 
-        model.addAttribute("sessionS", session);
+        model.addAttribute("reqSessions", sessions);
 
         return "sessions";
     }
@@ -121,7 +115,8 @@ public class HomeController {
             @RequestParam("surname") String surname,
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        if (!userService.isEmailExist(email)) {
+        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/isemailexist?email="+email, Boolean.class);
+        if (!isExist) {
             User newUser = new User();
             newUser.setName(name);
             newUser.setSurname(surname);
@@ -162,12 +157,13 @@ public class HomeController {
     public String loginUser(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        if (userService.isEmailExist(email)) {
-            user = userService.getByEmail(email);
+        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/isemailexist?email="+email, Boolean.class);
+        if (isExist) {
+            user = restTemplate.getForObject("http://localhost:8080/users/email?email="+email, User.class);
             if (user.getPassword().equals(password)) {
                 user.setToken("1");
                 token = 1;
-                userService.update(user.getUserId(), user);
+                restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
                 return "redirect:/filmsPage";
             } else {
                 hata=3;
@@ -184,7 +180,8 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-        userService.update(user.getUserId(), user);
+        restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+
         return "redirect:/filmsPage";
     }
 }
