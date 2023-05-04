@@ -3,14 +3,18 @@ package com.Softito.cinemaTicketSystem.Controller;
 
 import com.Softito.cinemaTicketSystem.Model.Film;
 import com.Softito.cinemaTicketSystem.Model.Role;
+import com.Softito.cinemaTicketSystem.Model.Session;
 import com.Softito.cinemaTicketSystem.Model.User;
-import com.Softito.cinemaTicketSystem.Services.UserService;
+import com.Softito.cinemaTicketSystem.Services.*;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -18,17 +22,27 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
     @Autowired
-    private UserService service;
+    private UserService userService;
+    @Autowired
+    private TicketService ticketService;
+    @Autowired
+    private SaloonService saloonService;
+    @Autowired
+    private SessionService sessionService;
+    @Autowired
+    private FilmService filmService;
+
     private int token = 0;
     private User user;
+
 
     public HomeController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -48,10 +62,6 @@ public class HomeController {
         return "registerPage";
     }
 
-    @GetMapping("/success")
-    public String success() {
-        return "success";
-    }
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -59,11 +69,35 @@ public class HomeController {
         return "loginPage";
     }
 
-    @GetMapping("/isLogged")
-    public String isLogged() {
-        if (token==1) {
+    @GetMapping("/isLogged/{id}")
+    public String isLogged(@PathVariable Long id,Model model) {
+        if (token == 1) {
+            Long a=sessionService.getById(id).getSaloon().getSaloonId();
+            Long capacity = saloonService.getCapacity(a);
+            model.addAttribute("capacity", capacity);
+            model.addAttribute("ticket",ticketService);
             return "satis";
-        } else return "redirect:/login";
+        } else {
+            return "redirect:/login";
+        }
+    }
+
+    @GetMapping("/session/{id}")
+    public String sessions(@PathVariable Long id, Model model) {
+        Film film = restTemplate.getForObject("http://localhost:8080/films/"+id, Film.class );
+        model.addAttribute("film", film);
+
+        byte [] img=filmService.getById(id).getImage();
+        String base64Data = Base64.getEncoder().encodeToString(img);
+        model.addAttribute("img",base64Data);
+        model.addAttribute("token", token);
+
+        List<Session> session = sessionService.getAll().stream().filter(s -> s.getFilm().getFilmId() == id)
+                .collect(Collectors.toList());;
+
+        model.addAttribute("sessionS", session);
+
+        return "sessions";
     }
 
     @PostMapping("/saveUser")
@@ -72,8 +106,8 @@ public class HomeController {
             @RequestParam("surname") String surname,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            Model model) throws IOException {
-        if (!service.isEmailExist(email)) {
+            Model model) {
+        if (!userService.isEmailExist(email)) {
             User newUser = new User();
             newUser.setName(name);
             newUser.setSurname(surname);
@@ -93,7 +127,6 @@ public class HomeController {
             newUser.setCreated_at(date);
             newUser.setRole(new Role(2L));
 
-
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<User> entity = new HttpEntity<>(newUser, headers);
@@ -106,7 +139,7 @@ public class HomeController {
             );
             return "redirect:/login";
         } else {
-            model.addAttribute("emailError","Bu email zaten var");
+            model.addAttribute("emailError", "Bu email zaten var");
             return "redirect:/register";
         }
     }
@@ -115,12 +148,12 @@ public class HomeController {
     public String loginUser(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        if (service.isEmailExist(email)) {
-            user = service.getByEmail(email);
+        if (userService.isEmailExist(email)) {
+            user = userService.getByEmail(email);
             if (user.getPassword().equals(password)) {
                 user.setToken("1");
                 token = 1;
-                service.update(user.getUserId(), user);
+                userService.update(user.getUserId(), user);
                 return "redirect:/filmsPage";
             } else {
                 return "redirect:/login";
@@ -135,7 +168,7 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-        service.update(user.getUserId(), user);
+        userService.update(user.getUserId(), user);
         return "redirect:/filmsPage";
     }
 }
