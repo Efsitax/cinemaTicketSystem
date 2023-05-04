@@ -40,7 +40,7 @@ public class HomeController {
     @Autowired
     private FilmService filmService;
 
-    private int token = 0;
+    private int token = 0, hata=0;
     private User user;
 
 
@@ -59,6 +59,11 @@ public class HomeController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("token", token);
+        if(hata==1){
+            String mesaj = "Bu email zaten var";
+            model.addAttribute("emailError", mesaj);
+            hata=0;
+        }
         return "registerPage";
     }
 
@@ -66,6 +71,16 @@ public class HomeController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("token", token);
+        if(hata==2){
+            String mesaj = "Email hatali.";
+            model.addAttribute("emailError", mesaj);
+            hata=0;
+        }
+        if(hata==3){
+            String mesaj = "Sifre hatali.";
+            model.addAttribute("emailError", mesaj);
+            hata=0;
+        }
         return "loginPage";
     }
 
@@ -105,8 +120,7 @@ public class HomeController {
             @RequestParam("name") String name,
             @RequestParam("surname") String surname,
             @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            Model model) {
+            @RequestParam("password") String password) {
         if (!userService.isEmailExist(email)) {
             User newUser = new User();
             newUser.setName(name);
@@ -139,7 +153,7 @@ public class HomeController {
             );
             return "redirect:/login";
         } else {
-            model.addAttribute("emailError", "Bu email zaten var");
+            hata=1;
             return "redirect:/register";
         }
     }
@@ -156,9 +170,11 @@ public class HomeController {
                 userService.update(user.getUserId(), user);
                 return "redirect:/filmsPage";
             } else {
+                hata=3;
                 return "redirect:/login";
             }
         } else {
+            hata=2;
             return "redirect:/login";
         }
 
