@@ -27,7 +27,8 @@ import java.util.stream.Collectors;
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
-
+    @Autowired
+    private UserService userService;
     private int token = 0, hata=0;
     private User user;
 
@@ -41,6 +42,19 @@ public class HomeController {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("films", films);
         model.addAttribute("token", token);
+
+        return "filmsPage";
+    }
+    @GetMapping("/filmsPage/{id}")
+    public String getAllFilms(@PathVariable Long id,Model model) {
+        List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
+
+        model.addAttribute("films", films);
+        model.addAttribute("token", token);
+        model.addAttribute("id",id);
+        User users=userService.getById(id);
+        model.addAttribute("users",users);
+
         return "filmsPage";
     }
 
@@ -71,6 +85,14 @@ public class HomeController {
         }
         return "loginPage";
     }
+
+    @GetMapping("/credit")
+    public String credit(@PathVariable Long id,Model model) {
+
+        return "credit";
+    }
+
+
 
     @GetMapping("/isLogged/{id}")
     public String isLogged(@PathVariable Long id,Model model) {
@@ -108,6 +130,12 @@ public class HomeController {
 
         return "sessions";
     }
+
+    /*BURASIIIII
+    @PostMapping("/addBalance")
+    public String addBalance(@PathVariable Long id,@RequestParam int para){
+        return "/filmsPage/"+id;
+    }*/
 
     @PostMapping("/saveUser")
     public String saveUser(
@@ -164,7 +192,7 @@ public class HomeController {
                 user.setToken("1");
                 token = 1;
                 restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
-                return "redirect:/filmsPage";
+                return "redirect:/filmsPage/"+user.getUserId();
             } else {
                 hata=3;
                 return "redirect:/login";
