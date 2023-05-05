@@ -52,7 +52,8 @@ public class TicketService implements IBaseService<Ticket> {
     public List<Ticket> getTicketsBySessionId(Long sessionId) {
         return repository.findAllBySessionSessionId(sessionId);
     }
-    public List<Long> getSeatNums(List<Ticket> tickets){
+    public List<Long> getSeatNums(Long id){
+        List<Ticket> tickets = getTicketsBySessionId(id);
         List<Long> seatNums = new ArrayList<>();
         for(Ticket ticket:tickets){
             seatNums.add(ticket.getSeatNum());

@@ -5,6 +5,7 @@ import com.Softito.cinemaTicketSystem.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 @RestController
 @RequestMapping("/tickets")
@@ -20,6 +21,10 @@ public class TicketController {
     @GetMapping("/{id}")
     public Ticket getTicketById(@PathVariable Long id) {
         return service.getById(id);
+    }
+    @GetMapping("/seatnums/{id}")
+    public List<Long> getSeatNums(@PathVariable Long id) {
+        return service.getSeatNums(id);
     }
 
     @PostMapping("/add")

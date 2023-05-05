@@ -11,10 +11,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -76,10 +73,10 @@ public class HomeController {
     public String isLogged(@PathVariable Long id,Model model) {
         if (token == 1) {
             Session session = restTemplate.getForObject("http://localhost:8080/sessions/"+id, Session.class );
-            //Long SID=session.getSaloon().getSaloonId();
-            Long capacity = session.getSaloon().getCapacity();
-            model.addAttribute("capacity", capacity);
-            //model.addAttribute("ticket",ticketService);
+            List<Long> seatNums = restTemplate.getForObject("http://localhost:8080/tickets/seatnums/"+id, List.class);
+            model.addAttribute("balance",user.getBalance());
+            model.addAttribute("ses", session);
+            model.addAttribute("seats",seatNums);
             return "satis";
         } else {
             return "redirect:/login";
@@ -183,5 +180,51 @@ public class HomeController {
         restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
 
         return "redirect:/filmsPage";
+    }
+    @PostMapping("/buyticket")
+    @ResponseBody
+    public String buyTicket(@RequestBody Map<String, Object> requestData, Model model){
+        List<String> seatNumsstr = (List<String>) requestData.get("seatNums");
+        List<Integer> seatNums = new ArrayList<>();
+        for(String str:seatNumsstr){
+            Integer seat = Integer.valueOf(str);
+            seatNums.add(seat);
+        }
+        Integer price = (Integer) requestData.get("price");
+        Integer balance = (Integer) requestData.get("balance");
+        Integer sessionId = (Integer) requestData.get("sessionId");
+        Integer total = price*(seatNums.size());
+        if(total>balance){
+            return "Bakiye Yetersiz.";
+        }
+        else{
+            balance-=total;
+            Long balLg = balance.longValue();
+            user.setBalance(balLg);
+            restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+
+            Long sesLg = sessionId.longValue();
+            for (Integer seatNum: seatNums) {
+                Long seatLg = seatNum.longValue();
+                Ticket newTicket = new Ticket();
+
+                newTicket.setUser(new User());
+                newTicket.getUser().setUserId(user.getUserId());
+                newTicket.setSession(new Session());
+                newTicket.getSession().setSessionId(sesLg);
+                newTicket.setSeatNum(seatLg);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<Ticket> entity = new HttpEntity<>(newTicket, headers);
+                ResponseEntity<String> response = restTemplate.exchange(
+                        "http://localhost:8080/tickets/add",
+                        HttpMethod.POST,
+                        entity,
+                        String.class
+                );
+            }
+            return "Satin alim basarili.";
+        }
     }
 }
