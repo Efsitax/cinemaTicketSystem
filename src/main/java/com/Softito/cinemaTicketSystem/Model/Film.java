@@ -18,9 +18,9 @@ public class Film {
     @Column(name = "name")
     private String name;
     @Column(name = "duration")
-    private String Duration;
+    private Long Duration;
     @Column(name = "price")
-    private String Price;
+    private Long Price;
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "description", columnDefinition = "text")

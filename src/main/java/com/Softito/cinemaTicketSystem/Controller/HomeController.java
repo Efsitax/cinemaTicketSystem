@@ -1,22 +1,17 @@
 package com.Softito.cinemaTicketSystem.Controller;
 
 
-import com.Softito.cinemaTicketSystem.Model.Film;
-import com.Softito.cinemaTicketSystem.Model.Role;
-import com.Softito.cinemaTicketSystem.Model.Session;
-import com.Softito.cinemaTicketSystem.Model.User;
+import com.Softito.cinemaTicketSystem.Model.*;
 import com.Softito.cinemaTicketSystem.Services.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -29,16 +24,6 @@ import java.util.stream.Collectors;
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private TicketService ticketService;
-    @Autowired
-    private SaloonService saloonService;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private FilmService filmService;
 
     private int token = 0, hata=0;
     private User user;
@@ -87,10 +72,11 @@ public class HomeController {
     @GetMapping("/isLogged/{id}")
     public String isLogged(@PathVariable Long id,Model model) {
         if (token == 1) {
-            Long a=sessionService.getById(id).getSaloon().getSaloonId();
-            Long capacity = saloonService.getCapacity(a);
-            model.addAttribute("capacity", capacity);
-            model.addAttribute("ticket",ticketService);
+            Session session = restTemplate.getForObject("http://localhost:8080/sessions/"+id, Session.class );
+            List<Long> seatNums = restTemplate.getForObject("http://localhost:8080/tickets/seatnums/"+id, List.class);
+            model.addAttribute("balance",user.getBalance());
+            model.addAttribute("ses", session);
+            model.addAttribute("seats",seatNums);
             return "satis";
         } else {
             return "redirect:/login";
@@ -102,15 +88,20 @@ public class HomeController {
         Film film = restTemplate.getForObject("http://localhost:8080/films/"+id, Film.class );
         model.addAttribute("film", film);
 
-        byte [] img=filmService.getById(id).getImage();
+        byte [] img=film.getImage();
         String base64Data = Base64.getEncoder().encodeToString(img);
         model.addAttribute("img",base64Data);
         model.addAttribute("token", token);
 
-        List<Session> session = sessionService.getAll().stream().filter(s -> s.getFilm().getFilmId() == id)
+        List<Session> allSessions = restTemplate.exchange(
+                "http://localhost:8080/sessions",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Session>>() {}).getBody();
+        List<Session> sessions = allSessions.stream().filter(s -> s.getFilm().getFilmId() == id)
                 .collect(Collectors.toList());;
 
-        model.addAttribute("sessionS", session);
+        model.addAttribute("reqSessions", sessions);
 
         return "sessions";
     }
@@ -121,7 +112,8 @@ public class HomeController {
             @RequestParam("surname") String surname,
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        if (!userService.isEmailExist(email)) {
+        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/isemailexist?email="+email, Boolean.class);
+        if (!isExist) {
             User newUser = new User();
             newUser.setName(name);
             newUser.setSurname(surname);
@@ -162,12 +154,13 @@ public class HomeController {
     public String loginUser(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        if (userService.isEmailExist(email)) {
-            user = userService.getByEmail(email);
+        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/isemailexist?email="+email, Boolean.class);
+        if (isExist) {
+            user = restTemplate.getForObject("http://localhost:8080/users/email?email="+email, User.class);
             if (user.getPassword().equals(password)) {
                 user.setToken("1");
                 token = 1;
-                userService.update(user.getUserId(), user);
+                restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
                 return "redirect:/filmsPage";
             } else {
                 hata=3;
@@ -184,7 +177,54 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-        userService.update(user.getUserId(), user);
+        restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+
         return "redirect:/filmsPage";
+    }
+    @PostMapping("/buyticket")
+    @ResponseBody
+    public String buyTicket(@RequestBody Map<String, Object> requestData, Model model){
+        List<String> seatNumsstr = (List<String>) requestData.get("seatNums");
+        List<Integer> seatNums = new ArrayList<>();
+        for(String str:seatNumsstr){
+            Integer seat = Integer.valueOf(str);
+            seatNums.add(seat);
+        }
+        Integer price = (Integer) requestData.get("price");
+        Integer balance = (Integer) requestData.get("balance");
+        Integer sessionId = (Integer) requestData.get("sessionId");
+        Integer total = price*(seatNums.size());
+        if(total>balance){
+            return "Bakiye Yetersiz.";
+        }
+        else{
+            balance-=total;
+            Long balLg = balance.longValue();
+            user.setBalance(balLg);
+            restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+
+            Long sesLg = sessionId.longValue();
+            for (Integer seatNum: seatNums) {
+                Long seatLg = seatNum.longValue();
+                Ticket newTicket = new Ticket();
+
+                newTicket.setUser(new User());
+                newTicket.getUser().setUserId(user.getUserId());
+                newTicket.setSession(new Session());
+                newTicket.getSession().setSessionId(sesLg);
+                newTicket.setSeatNum(seatLg);
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                HttpEntity<Ticket> entity = new HttpEntity<>(newTicket, headers);
+                ResponseEntity<String> response = restTemplate.exchange(
+                        "http://localhost:8080/tickets/add",
+                        HttpMethod.POST,
+                        entity,
+                        String.class
+                );
+            }
+            return "Satin alim basarili.";
+        }
     }
 }

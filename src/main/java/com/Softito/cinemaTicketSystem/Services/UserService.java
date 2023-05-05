@@ -3,6 +3,7 @@ package com.Softito.cinemaTicketSystem.Services;
 import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
