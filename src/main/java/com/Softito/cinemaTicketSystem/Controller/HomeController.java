@@ -2,6 +2,7 @@ package com.Softito.cinemaTicketSystem.Controller;
 
 
 import com.Softito.cinemaTicketSystem.Model.*;
+import com.Softito.cinemaTicketSystem.Repository.UserRepository;
 import com.Softito.cinemaTicketSystem.Services.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class HomeController {
     private User user;
 
 
+
     public HomeController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -51,6 +53,7 @@ public class HomeController {
 
         model.addAttribute("films", films);
         model.addAttribute("token", token);
+
         model.addAttribute("id",id);
         User users=userService.getById(id);
         model.addAttribute("users",users);
@@ -86,9 +89,10 @@ public class HomeController {
         return "loginPage";
     }
 
-    @GetMapping("/credit")
+    @GetMapping("/credit/{id}")
     public String credit(@PathVariable Long id,Model model) {
-
+        User users=userService.getById(id);
+        model.addAttribute("users",users);
         return "credit";
     }
 
@@ -131,11 +135,16 @@ public class HomeController {
         return "sessions";
     }
 
-    /*BURASIIIII
-    @PostMapping("/addBalance")
-    public String addBalance(@PathVariable Long id,@RequestParam int para){
-        return "/filmsPage/"+id;
-    }*/
+
+    @PostMapping("/addBalance/{id}")
+    public String addBalance(@PathVariable Long id,@RequestParam Long para){
+        User users2=userService.getById(id);
+
+        users2.setBalance(users2.getBalance()+para);
+        userService.update(id,users2);
+
+        return "redirect:/filmsPage/"+id;
+    }
 
     @PostMapping("/saveUser")
     public String saveUser(
@@ -150,7 +159,7 @@ public class HomeController {
             newUser.setSurname(surname);
             newUser.setEmail(email);
             newUser.setPassword(password);
-            newUser.setBalance(100L);
+            newUser.setBalance(0L);
             newUser.setIsActive(true);
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -208,7 +217,7 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-        restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+
 
         return "redirect:/filmsPage";
     }

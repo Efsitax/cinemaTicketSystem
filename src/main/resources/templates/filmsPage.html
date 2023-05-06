@@ -30,15 +30,10 @@
     </div>
   </nav>
   <div class="jumbotron jumbotron-fluid bg-dark text-light">
-    <div>
-      <ul>
-        <li>
-          <a th:if="${token==1}" th:text="${users.name}"></a>
-          <a th:if="${token==1}" th:text="${users.balance}"></a>
-         <!-- <a th:if="${token==1}" th:href="@{/credit/{id}(id=${users.userId})}" class="btn btn-primary">Add Balance</a>-->
-          <a th:if="${token==1}" th:href="@{/credit}" class="btn btn-primary">Add Balance</a>
-        </li>
-      </ul>
+    <div th:if="${token==1}">
+          <a  th:text="${users.name}"></a>
+          <a  th:text="${#numbers.formatCurrency(users.balance)}"></a>
+          <a  th:href="@{/credit/{id}(id=${id})}" class="btn btn-primary">Add Balance</a>
     </div>
 
     <div class="container">
