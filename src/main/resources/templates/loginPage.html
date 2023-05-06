@@ -1,81 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<meta charset="UTF-8">
-	<title>Login</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-......" crossorigin="anonymous" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<style>
-		body {
-			background-color: #343a40;
-		}
-	</style>
-</head>
-<body>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Cinema Ticket System</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-......" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<style>
+			body {
+				background-color: #343a40;
+			}
+		</style>
+	</head>
+	<body class="jumbotron-fluid bg-dark">
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Cinema Ticket Managment System</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-		  <span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-		  <ul class="navbar-nav ml-auto">
-			<li class="nav-item">
-			  <a class="nav-link" href="../../../../../../../../Downloads/site/site/cinema-world/home.html"><i class="fa fa-home">Home</i></a>
-			</li>
-			<li class="nav-item">
-			  <a class="nav-link" href="filmsPage"><i class="fa fa-film">Films</i></a>
-			</li>
-		  </ul>
-		</div>
-	  </nav>     
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="#">Cinema Ticket Managment System</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+			  <ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+				  <a class="nav-link" href="../../../../../../../../Downloads/site/site/cinema-world/home.html"><i class="fa fa-home">Home</i></a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="/filmsPage"><i class="fa fa-film">Films</i></a>
+				</li>
+			  </ul>
+			</div>
+		  </nav>
 
-	<div class="container bg-dark">
-		<div class="row">
-			<div class="col-md-6 mx-auto">
-				<div class="card mt-5">
-					<div class="card-header">
-						<h4>Login</h4>
-					</div>
-					<div class="card-body">
-						<form method="post" action="/loginUser">
-							<div class="form-group">
-								<label for="email">Email</label>
-								<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
-							</div>
-							<div class="form-group">
-								<label for="password">Password</label>
-								<input type="password" class="form-control" id="password" name="password" placeholder="Password">
-							</div>
-							<button type="submit" class="btn btn-primary">Login</button>
-							<button id="register-btn" class="btn btn-secondary">Kayıt Ol</button>
-						</form>
+		<div class="container bg-dark">
+			<div class="row">
+				<div class="col-md-6 mx-auto">
+					<div class="card mt-5">
+						<div class="card-header">
+							<h4>Login</h4>
+						</div>
+						<div class="card-body">
+							<form method="post" action="/loginUser">
+								<div class="form-group">
+									<label for="email">Email</label>
+									<input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+								</div>
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+								</div>
+								<button type="submit" class="btn btn-primary">Log in</button>
+								<button id="register-btn" class="btn btn-secondary">Register</button>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-	<script th:inline="javascript">
-		$(function(){
-			$('#register-btn').click(function(){
-				window.location.href = 'register';
-				return false;
+		<script th:inline="javascript">
+			$(function(){
+				$('#register-btn').click(function(){
+					window.location.href = 'register';
+					return false;
+				});
 			});
-		});
-		var errorMessage = [[${emailError}]];
+			var errorMessage = [[${emailError}]];
 
-        // If the error message is not empty, display an alert
-        if (errorMessage !== null) {
-            alert(errorMessage);
-        }
-	</script>
-
-</body>
+			// If the error message is not empty, display an alert
+			if (errorMessage !== null) {
+				alert(errorMessage);
+			}
+		</script>
+	</body>
 </html>

@@ -45,7 +45,7 @@ public class User {
 
     @Column(name = "created_at", columnDefinition = "smalldatetime")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    private Date createdAt;
 
     @Column(name = "updated_at", columnDefinition = "smalldatetime")
     @Temporal(TemporalType.TIMESTAMP)

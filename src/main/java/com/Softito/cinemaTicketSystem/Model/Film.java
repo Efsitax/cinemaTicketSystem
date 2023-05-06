@@ -6,6 +6,8 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -17,10 +19,12 @@ public class Film {
     private Long filmId;
     @Column(name = "name")
     private String name;
+    @Column(name = "language")
+    private String language;
     @Column(name = "duration")
-    private Long Duration;
+    private Long duration;
     @Column(name = "price")
-    private Long Price;
+    private Long price;
     @Column(name = "is_active")
     private Boolean isActive;
     @Column(name = "description", columnDefinition = "text")

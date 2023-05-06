@@ -2,20 +2,14 @@ package com.Softito.cinemaTicketSystem.Controller;
 
 
 import com.Softito.cinemaTicketSystem.Model.*;
-import com.Softito.cinemaTicketSystem.Repository.UserRepository;
-import com.Softito.cinemaTicketSystem.Services.*;
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -25,12 +19,8 @@ import java.util.stream.Collectors;
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
-    @Autowired
-    private UserService userService;
-    private int token = 0, hata=0;
-    private User user;
-
-
+    private int token = 0, error=0;
+    private User user=new User();
 
     public HomeController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -41,17 +31,17 @@ public class HomeController {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("films", films);
         model.addAttribute("token", token);
-        model.addAttribute("users",user);
+        model.addAttribute("balance",user.getBalance());
         return "filmsPage";
     }
 
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("token", token);
-        if(hata==1){
-            String mesaj = "Bu email zaten var";
-            model.addAttribute("emailError", mesaj);
-            hata=0;
+        if(error==1){
+            String message = "This email is already exist.";
+            model.addAttribute("emailError", message);
+            error=0;
         }
         return "registerPage";
     }
@@ -60,15 +50,15 @@ public class HomeController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("token", token);
-        if(hata==2){
-            String mesaj = "Email hatali.";
-            model.addAttribute("emailError", mesaj);
-            hata=0;
+        if(error==2){
+            String message = "Wrong email.";
+            model.addAttribute("emailError", message);
+            error=0;
         }
-        if(hata==3){
-            String mesaj = "Sifre hatali.";
-            model.addAttribute("emailError", mesaj);
-            hata=0;
+        if(error==3){
+            String message = "Wrong password.";
+            model.addAttribute("emailError", message);
+            error=0;
         }
         return "loginPage";
     }
@@ -79,17 +69,21 @@ public class HomeController {
         return "credit";
     }
 
-
+    @GetMapping("/orderPage/{id}")
+    public String orderPage(@PathVariable Long id,Model model){
+        Session session = restTemplate.getForObject("http://localhost:8080/sessions/"+id, Session.class );
+        List<Long> seatNums = restTemplate.getForObject("http://localhost:8080/tickets/seatnums/"+id, List.class);
+        model.addAttribute("balance",user.getBalance());
+        model.addAttribute("token", token);
+        model.addAttribute("ses", session);
+        model.addAttribute("seats",seatNums);
+        return "orderPage";
+    }
 
     @GetMapping("/isLogged/{id}")
     public String isLogged(@PathVariable Long id,Model model) {
         if (token == 1) {
-            Session session = restTemplate.getForObject("http://localhost:8080/sessions/"+id, Session.class );
-            List<Long> seatNums = restTemplate.getForObject("http://localhost:8080/tickets/seatnums/"+id, List.class);
-            model.addAttribute("balance",user.getBalance());
-            model.addAttribute("ses", session);
-            model.addAttribute("seats",seatNums);
-            return "satis";
+            return "redirect:/orderPage/"+id;
         } else {
             return "redirect:/login";
         }
@@ -104,7 +98,7 @@ public class HomeController {
         String base64Data = Base64.getEncoder().encodeToString(img);
         model.addAttribute("img",base64Data);
         model.addAttribute("token", token);
-
+        model.addAttribute("balance",user.getBalance());
         List<Session> allSessions = restTemplate.exchange(
                 "http://localhost:8080/sessions",
                 HttpMethod.GET,
@@ -115,16 +109,14 @@ public class HomeController {
 
         model.addAttribute("reqSessions", sessions);
 
-        return "sessions";
+        return "sessionsPage";
     }
 
 
     @PostMapping("/addBalance")
     public String addBalance(@RequestParam Long para){
-
         user.setBalance(user.getBalance()+para);
-        userService.update(user.getUserId(), user);
-
+        restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
         return "redirect:/filmsPage";
     }
 
@@ -152,7 +144,7 @@ public class HomeController {
             // Convert the formatted date to a java.util.Date object
             Date date = java.sql.Date.valueOf(formattedDate);
 
-            newUser.setCreated_at(date);
+            newUser.setCreatedAt(date);
             newUser.setRole(new Role(2L));
 
             HttpHeaders headers = new HttpHeaders();
@@ -167,7 +159,7 @@ public class HomeController {
             );
             return "redirect:/login";
         } else {
-            hata=1;
+            error=1;
             return "redirect:/register";
         }
     }
@@ -185,11 +177,11 @@ public class HomeController {
                 restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
                 return "redirect:/filmsPage";
             } else {
-                hata=3;
+                error=3;
                 return "redirect:/login";
             }
         } else {
-            hata=2;
+            error=2;
             return "redirect:/login";
         }
 
@@ -199,16 +191,17 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-
+        restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+        user = new User();
 
         return "redirect:/filmsPage";
     }
     @PostMapping("/buyticket")
     @ResponseBody
     public String buyTicket(@RequestBody Map<String, Object> requestData, Model model){
-        List<String> seatNumsstr = (List<String>) requestData.get("seatNums");
+        List<String> seatNumsStr = (List<String>) requestData.get("seatNums");
         List<Integer> seatNums = new ArrayList<>();
-        for(String str:seatNumsstr){
+        for(String str:seatNumsStr){
             Integer seat = Integer.valueOf(str);
             seatNums.add(seat);
         }
@@ -217,7 +210,7 @@ public class HomeController {
         Integer sessionId = (Integer) requestData.get("sessionId");
         Integer total = price*(seatNums.size());
         if(total>balance){
-            return "Bakiye Yetersiz.";
+            return "Insufficient balance.";
         }
         else{
             balance-=total;
@@ -246,7 +239,7 @@ public class HomeController {
                         String.class
                 );
             }
-            return "Satin alim basarili.";
+            return "Purchase successful.";
         }
     }
 }
