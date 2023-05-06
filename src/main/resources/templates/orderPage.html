@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Cinema Ticket System</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-......" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <style>
+    .seat {
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      background-color: #1abc9c;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .seat-booked {
+      background-color: #e74c3c;
+      cursor: default;
+    }
+    .seat-blocked {
+      background-color: #5585b5;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+  <body class="jumbotron-fluid bg-dark text-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Cinema Ticket Managment System</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="homePage.html"><i class="fa fa-home">Home</i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="filmsPage"><i class="fa fa-film">Films</i></a>
+          </li>
+          <li>
+            <a  href="/credit" class="nav-link"><i class="fas fa-cash-register" th:text="@{'Balance: '+${balance}+' $'}"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logoutUser"><i class="fa fa-user">Log Out</i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <h1 class="mt-3 mb-3 display-3 font-weight-bold">Ticket Sale</h1>
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <h2 class="col-6" th:text="@{'Saloon: ' + ${ses.saloon.saloonId}}"></h2>
+            <h2 class="col-6" th:text="@{'Price: ' + ${ses.film.price}}+' $'"></h2>
+          </div>
+          <div id="seats"></div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="total">Total Ticket Number:</label>
+              <input type="text" class="form-control" id="total" readonly>
+            </div>
+            <div class="form-group">
+              <label for="total-price">Total Price:</label>
+              <input type="text" class="form-control" id="total-price" readonly>
+            </div>
+            <button class="btn btn-primary" id="buy">Buy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script th:inline="javascript">
+      const seats = document.getElementById("seats");
+      const buyBtn = document.getElementById("buy");
+      const totalInput = document.getElementById("total");
+      const totalPriceInput = document.getElementById("total-price");
+      const seatPrice = [[${ses.film.price}]];
+
+      const createSeat = (id, seatNumber, isBooked) => {
+        const seatDiv = document.createElement("div");
+        seatDiv.classList.add("seat");
+        seatDiv.dataset.seatId = id;
+        seatDiv.dataset.seatNumber = seatNumber;
+        if (isBooked) {
+          seatDiv.classList.add("seat-booked");
+          seatDiv.disabled = true;
+        } else if(bookedSeats.includes(id)){
+          seatDiv.classList.add("seat-blocked");
+        }
+        else {
+          seatDiv.addEventListener("click", () => {
+            seatDiv.classList.toggle("seat-booked");
+            calculateTotal();
+          });
+        }
+        seatDiv.innerText = seatNumber;
+        return seatDiv;
+      };
+      const createSeats = (container, totalSeats) => {
+        for (let i = 1; i <= totalSeats; i++) {
+          const seat = createSeat(i, i, false);
+          container.appendChild(seat);
+        }
+
+      };
+      const bookedSeats = [[${seats}]];
+
+      const calculateTotal = () => {
+        const selectedSeats = document.querySelectorAll(".seat-booked");
+        const totalSeats = selectedSeats.length;
+        const totalPrice = totalSeats * seatPrice;
+        totalInput.value = totalSeats;
+        totalPriceInput.value = totalPrice;
+      };
+      createSeats(seats, [[${ses.saloon.capacity}]]);
+
+      buyBtn.addEventListener("click", () => {
+        const selectedSeats = document.querySelectorAll(".seat-booked");
+        const totalSeats = selectedSeats.length;
+        const totalPrice = totalSeats * seatPrice;
+        if (totalSeats > 0) {
+
+          alert(`You have purchased ${totalSeats} tickets. Amount you have to pay: ${totalPrice} $`);
+          var seatNums = [];
+          selectedSeats.forEach(function(div) {
+            seatNums.push(div.textContent);
+          });
+          const xhr = new XMLHttpRequest();
+          var price = [[${ses.film.price}]];
+          var balance = [[${balance}]];
+          var sesId = [[${ses.sessionId}]];
+          xhr.open("POST", "/buyticket");
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+          let data = {
+            seatNums: seatNums,
+            price: price,
+            balance: balance,
+            sessionId: sesId
+          };
+          let jsonData = JSON.stringify(data);
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              var message = xhr.responseText;
+
+              // Handle the response message as needed
+              alert(message);
+
+              if (message === "Purchase successful.") {
+                // Redirect to the desired URL after a successful purchase
+                window.location.href = "/filmsPage";
+              } else {
+                // Redirect to the desired URL after an unsuccessful purchase
+                window.location.href = "/isLogged/" + sesId;
+              }
+            } else {
+              alert("An error occurred while processing the request.");
+            }
+          };
+
+          xhr.send(jsonData);
+
+        } else {
+          alert("Please select at least one seat.");
+        }
+      });
+      var errorMessage = [[${balanceError}]];
+
+      // If the error message is not empty, display an alert
+      if (errorMessage !== null) {
+        alert(errorMessage);
+      }
+    </script>
+  </body>
+</html>

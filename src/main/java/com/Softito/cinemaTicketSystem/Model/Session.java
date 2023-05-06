@@ -6,6 +6,8 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @Setter
@@ -21,7 +23,12 @@ public class Session {
     @ManyToOne
     @JoinColumn(name = "saloon_id",referencedColumnName = "saloon_id")
     private Saloon saloon;
-
+    @Column(name = "begin_time", columnDefinition = "smalldatetime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date beginTime;
+    @Column(name = "end_time", columnDefinition = "smalldatetime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date endTime;
     @JsonCreator
     public Session(@JsonProperty("session_id") Long id) {
         this.sessionId = id;
