@@ -29,9 +29,6 @@ public class User {
     @Column(name = "password",nullable=false)
     private String password;
 
-    @Column(name = "photo", columnDefinition = "image")
-    private byte[] photo;
-
     @ManyToOne
     @JoinColumn(name = "role_id",referencedColumnName = "role_id")
     private Role role;

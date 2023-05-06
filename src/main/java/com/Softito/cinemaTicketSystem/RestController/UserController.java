@@ -24,7 +24,7 @@ public class UserController {
     public User getUserById(@PathVariable Long id) {
         return service.getById(id);
     }
-    @GetMapping("/isemailexist")
+    @GetMapping("/is-email-exist")
     public Boolean isEmailexist(@RequestParam String email) {
         return service.getByEmail(email) != null;
     }

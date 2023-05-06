@@ -22,7 +22,7 @@ public class TicketController {
     public Ticket getTicketById(@PathVariable Long id) {
         return service.getById(id);
     }
-    @GetMapping("/seatnums/{id}")
+    @GetMapping("/seat-nums/{id}")
     public List<Long> getSeatNums(@PathVariable Long id) {
         return service.getSeatNums(id);
     }
