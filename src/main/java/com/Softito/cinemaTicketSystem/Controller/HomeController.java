@@ -2,6 +2,7 @@ package com.Softito.cinemaTicketSystem.Controller;
 
 
 import com.Softito.cinemaTicketSystem.Model.*;
+import com.Softito.cinemaTicketSystem.Repository.UserRepository;
 import com.Softito.cinemaTicketSystem.Services.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,11 @@ import java.util.stream.Collectors;
 public class HomeController {
     @Autowired
     private final RestTemplate restTemplate;
-
+    @Autowired
+    private UserService userService;
     private int token = 0, hata=0;
     private User user;
+
 
 
     public HomeController(RestTemplate restTemplate) {
@@ -38,6 +41,20 @@ public class HomeController {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("films", films);
         model.addAttribute("token", token);
+
+        return "filmsPage";
+    }
+    @GetMapping("/filmsPage/{id}")
+    public String getAllFilms(@PathVariable Long id,Model model) {
+        List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
+
+        model.addAttribute("films", films);
+        model.addAttribute("token", token);
+
+        model.addAttribute("id",id);
+        User users=userService.getById(id);
+        model.addAttribute("users",users);
+
         return "filmsPage";
     }
 
@@ -68,6 +85,15 @@ public class HomeController {
         }
         return "loginPage";
     }
+
+    @GetMapping("/credit/{id}")
+    public String credit(@PathVariable Long id,Model model) {
+        User users=userService.getById(id);
+        model.addAttribute("users",users);
+        return "credit";
+    }
+
+
 
     @GetMapping("/isLogged/{id}")
     public String isLogged(@PathVariable Long id,Model model) {
@@ -106,6 +132,17 @@ public class HomeController {
         return "sessions";
     }
 
+
+    @PostMapping("/addBalance/{id}")
+    public String addBalance(@PathVariable Long id,@RequestParam Long para){
+        User users2=userService.getById(id);
+
+        users2.setBalance(users2.getBalance()+para);
+        userService.update(id,users2);
+
+        return "redirect:/filmsPage/"+id;
+    }
+
     @PostMapping("/saveUser")
     public String saveUser(
             @RequestParam("name") String name,
@@ -119,7 +156,7 @@ public class HomeController {
             newUser.setSurname(surname);
             newUser.setEmail(email);
             newUser.setPassword(password);
-            newUser.setBalance(100L);
+            newUser.setBalance(0L);
             newUser.setIsActive(true);
             // Get the current date
             LocalDate currentDate = LocalDate.now();
@@ -161,7 +198,7 @@ public class HomeController {
                 user.setToken("1");
                 token = 1;
                 restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
-                return "redirect:/filmsPage";
+                return "redirect:/filmsPage/"+user.getUserId();
             } else {
                 hata=3;
                 return "redirect:/login";
@@ -177,7 +214,7 @@ public class HomeController {
     public String logoutUser() {
         user.setToken("0");
         token = 0;
-        restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
+
 
         return "redirect:/filmsPage";
     }

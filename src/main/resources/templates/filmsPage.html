@@ -10,7 +10,7 @@
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Cinema Ticket Managment System</a>
+    <a class="navbar-brand" href="#">Cinema Ticket Management System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -23,13 +23,19 @@
           <a class="nav-link" href="filmsPage.html"><i class="fa fa-film">Films</i></a>
         </li>
         <li class="nav-item">
-          <a th:if="${token == 0}" class="nav-link" href="login"><i class="fa fa-user">Log in</i></a>
-          <a th:if="${token == 1}" class="nav-link" href="logoutUser"><i class="fa fa-user"></i> Log Out</a>
+          <a th:if="${token == 0}" class="nav-link" th:href="@{/login}"><i class="fa fa-user">Log in</i></a>
+          <a th:if="${token == 1}" class="nav-link" th:href="@{/logoutUser}"><i class="fa fa-user"></i> Log Out</a>
         </li>
       </ul>
     </div>
-  </nav> 
+  </nav>
   <div class="jumbotron jumbotron-fluid bg-dark text-light">
+    <div th:if="${token==1}">
+          <a  th:text="${users.name}"></a>
+          <a  th:text="${#numbers.formatCurrency(users.balance)}"></a>
+          <a  th:href="@{/credit/{id}(id=${id})}" class="btn btn-primary">Add Balance</a>
+    </div>
+
     <div class="container">
       <div class="row">
         <div class="col-6 p-5" style="height: 200px;">
