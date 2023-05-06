@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head >
+    <link rel="stylesheet" href="/css/credit.css">
+</head>
+
+<body>
+
+    <div class="cc__main__container">
+        <div class="form__container">
+            <h1 class="header">PAYMENT INFORMATION</h1>
+
+            <div class="card__main">
+                <div class="Front_card">
+                    <div class="top_card">
+                        <span class="visa">CARDCURD</span>
+                        <div class="logo">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="middle_card">
+                        <span class="chip"></span>
+                        <div class="card_number">0000 0000 0000 0000</div>
+                    </div>
+                    <div class="bottom_card">
+                        <div class="card_info">
+                            <div class="card_holder_name">Your Name</div>
+                        </div>
+                        <div class="card_info">
+                            <div class="card_holder_info">
+                                <span class="expire_month">MM</span>
+                                <span>/</span>
+                                <span class="expire_year">YY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="back_card">
+                    <div class="top_card">
+                        <span class="black_strip"></span>
+                        <div class="cvc_strip">
+                            <span class="cvc_number">000</span>
+                        </div>
+                    </div>
+                    <div class="bottom_card">
+                        <div class="flex">
+                            <span class="sticker"></span>
+                            <div class="logo1">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post" th:action="@{/addBalance/{id}(id=${users.userId})}">
+
+                <div class="inputBox">
+                    <span>card holder name</span>
+                    <input type="text" maxlength="30" id="name" name="name" class="card-holder-input"
+                        placeholder="Your Name" />
+                </div>
+                <div class="inputBox">
+                    <span>card number</span>
+                    <input type="text" id="card_number" name="card_number" maxlength="16" class="card-number-input"
+                        placeholder="0000 0000 0000 0000" />
+                </div>
+
+                <div class="multi__box">
+                    <div class="inputBox">
+                        <span>exp. (MM)</span>
+                        <input type="tel" id="exp_month" name="exp_month" maxlength="2" class="card-month-input"
+                            placeholder="00" />
+                    </div>
+                    <div class="inputBox">
+                        <span>exp. (YY)</span>
+                        <input type="text" id="exp_date" name="exp_date" maxlength="2" class="card-year-input"
+                            placeholder="00" />
+                    </div>
+                    <div class="inputBox">
+                        <span>CVC</span>
+                        <input type="text" id="CVC" name="CVC" maxlength="3" class="card-cvc-input" placeholder="000" />
+                    </div>
+                    <div class="inputBox">
+                        <span>Para</span>
+                        <input type="number" id="para" name="para" maxlength="3" class="card-cvc-input" placeholder="000" />
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary"  >Submit</button>
+            </form>
+        </div>
+
+    </div>
+    <script src="/js/credit.js"></script>
+
+   
+</body>
+
+</html>
