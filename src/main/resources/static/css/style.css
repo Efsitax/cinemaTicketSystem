@@ -12,25 +12,20 @@
     flex-wrap: wrap;
     align-content: flex-start;
     overflow: hidden;
- }
-
- .carousel-inner {
-    max-width: 800px; /* set the maximum width of the slider */
-    margin: 0 auto; /* center the slider horizontally */
-  }
-  
-  .carousel-item img {
-    max-height: 400px; /* set the maximum height of the images */
-  }
-  .carousel {
-    background-color: #000;
-  }
-  .carousel-caption {
-  background-color: black;
 }
 
+.carousel-inner {
+    max-width: 75%;/* set the maximum width of the slider */
+    margin:0 auto;
 
+}
 
-
-
-  
+.carousel-item img {
+    max-height: 50% /* set the maximum height of the images */
+}
+.carousel {
+    background-color: #343a40;
+}
+.carousel-caption {
+    background: rgba(0,0,0,0.5);
+}

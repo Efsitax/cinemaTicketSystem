@@ -26,6 +26,14 @@ public class HomeController {
         this.restTemplate = restTemplate;
     }
 
+    @GetMapping("/home")
+    public String home(Model model){
+        List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
+        model.addAttribute("token", token);
+        model.addAttribute("films", films);
+        return "homePage";
+    }
+
     @GetMapping("/filmsPage")
     public String getAllFilms(Model model) {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
@@ -72,7 +80,7 @@ public class HomeController {
     @GetMapping("/orderPage/{id}")
     public String orderPage(@PathVariable Long id,Model model){
         Session session = restTemplate.getForObject("http://localhost:8080/sessions/"+id, Session.class );
-        List<Long> seatNums = restTemplate.getForObject("http://localhost:8080/tickets/seatnums/"+id, List.class);
+        List<Long> seatNums = restTemplate.getForObject("http://localhost:8080/tickets/seat-nums/"+id, List.class);
         model.addAttribute("balance",user.getBalance());
         model.addAttribute("token", token);
         model.addAttribute("ses", session);
@@ -126,7 +134,7 @@ public class HomeController {
             @RequestParam("surname") String surname,
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/isemailexist?email="+email, Boolean.class);
+        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/is-email-exist?email="+email, Boolean.class);
         if (!isExist) {
             User newUser = new User();
             newUser.setName(name);

@@ -40,7 +40,6 @@ public class UserService implements IBaseService<User> {
             existingUser.setSurname(entity.getSurname());
             existingUser.setEmail(entity.getEmail());
             existingUser.setPassword(entity.getPassword());
-            existingUser.setPhoto(entity.getPhoto());
             existingUser.setIsActive(entity.getIsActive());
             return repository.save(existingUser);
         }
