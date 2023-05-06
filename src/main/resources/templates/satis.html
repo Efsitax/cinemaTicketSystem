@@ -43,7 +43,7 @@
         <a class="nav-link" href="home.html"><i class="fa fa-home">Home</i></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="films.html"><i class="fa fa-film">Films</i></a>
+        <a class="nav-link" href="filmsPage"><i class="fa fa-film">Films</i></a>
       </li>
       <li class="nav-item">
         <a th:if="${token == 0}" class="nav-link" href="login"><i class="fa fa-user">Log in</i></a>
@@ -88,7 +88,7 @@
   const buyBtn = document.getElementById("buy");
   const totalInput = document.getElementById("total");
   const totalPriceInput = document.getElementById("total-price");
-  const seatPrice = 10;
+  const seatPrice = [[${ses.film.price}]];
 
   const createSeat = (id, seatNumber, isBooked) => {
     const seatDiv = document.createElement("div");
