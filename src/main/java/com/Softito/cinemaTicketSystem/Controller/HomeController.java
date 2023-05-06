@@ -41,20 +41,7 @@ public class HomeController {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("films", films);
         model.addAttribute("token", token);
-
-        return "filmsPage";
-    }
-    @GetMapping("/filmsPage/{id}")
-    public String getAllFilms(@PathVariable Long id,Model model) {
-        List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
-
-        model.addAttribute("films", films);
-        model.addAttribute("token", token);
-
-        model.addAttribute("id",id);
-        User users=userService.getById(id);
-        model.addAttribute("users",users);
-
+        model.addAttribute("users",user);
         return "filmsPage";
     }
 
@@ -86,10 +73,9 @@ public class HomeController {
         return "loginPage";
     }
 
-    @GetMapping("/credit/{id}")
-    public String credit(@PathVariable Long id,Model model) {
-        User users=userService.getById(id);
-        model.addAttribute("users",users);
+    @GetMapping("/credit")
+    public String credit(Model model) {
+        model.addAttribute("users",user);
         return "credit";
     }
 
@@ -133,14 +119,13 @@ public class HomeController {
     }
 
 
-    @PostMapping("/addBalance/{id}")
-    public String addBalance(@PathVariable Long id,@RequestParam Long para){
-        User users2=userService.getById(id);
+    @PostMapping("/addBalance")
+    public String addBalance(@RequestParam Long para){
 
-        users2.setBalance(users2.getBalance()+para);
-        userService.update(id,users2);
+        user.setBalance(user.getBalance()+para);
+        userService.update(user.getUserId(), user);
 
-        return "redirect:/filmsPage/"+id;
+        return "redirect:/filmsPage";
     }
 
     @PostMapping("/saveUser")
@@ -198,7 +183,7 @@ public class HomeController {
                 user.setToken("1");
                 token = 1;
                 restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
-                return "redirect:/filmsPage/"+user.getUserId();
+                return "redirect:/filmsPage";
             } else {
                 hata=3;
                 return "redirect:/login";
