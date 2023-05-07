@@ -32,7 +32,7 @@
 <div class="preloader">
   <div class="loader">
     <div class="loader__figure"></div>
-    <p class="loader__label">Admin Pro</p>
+    <p class="loader__label">Admin Panel</p>
   </div>
 </div>
 
@@ -63,6 +63,8 @@
                   class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
           <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
                   class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
+          <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
+                  class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
         </ul>
       </nav>
       <!-- End Sidebar navigation -->
@@ -92,7 +94,7 @@
                 <div class="form-group">
                   <label class="col-md-12">Saloon Number</label>
                   <div class="col-md-12">
-                    <input type="text" th:placeholder="${saloonId}"
+                    <input type="text" th:value="${saloonId}"
                            class="form-control form-control-line" readonly>
                   </div>
                 </div>
@@ -115,7 +117,7 @@
                 </div>
                 <div class="form-group">
                   <div class="col-sm-12">
-                    <button class="btn btn-success">Update Profile</button>
+                    <button class="btn btn-success">Add Saloon</button>
                   </div>
                 </div>
               </form>

@@ -22,10 +22,10 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 			  <ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-				  <a class="nav-link" href="/home"><i class="fa fa-home">Home</i></a>
+				  <a class="nav-link" href="/"><i class="fa fa-home">Home</i></a>
 				</li>
 				<li class="nav-item">
-				  <a class="nav-link" href="/filmsPage"><i class="fa fa-film">Films</i></a>
+				  <a class="nav-link" href="filmsPage"><i class="fa fa-film">Films</i></a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="login"><i class="fa fa-user">Log in</i></a>
@@ -60,7 +60,7 @@
 								</div>
 								<div class="form-group">
 									<label for="password2">Password Again</label>
-									<input type="password" class="form-control" id="password2" placeholder="Password">
+									<input type="password" class="form-control" id="password2" placeholder="Password" required>
 								</div>
 
 								<button type="submit" class="btn btn-primary">Register</button>
@@ -83,7 +83,7 @@
 			document.querySelector("form").addEventListener("submit", function(event) {
 			  if (password1.value !== password2.value) {
 				alert("Şifreler Aynı Değil");
-				window.location.href = 'registerPage';
+				window.location.href = 'register';
 				event.preventDefault();
 			  }
 			});
@@ -96,7 +96,7 @@
 
 			$(function(){
 				$('#login-btn').click(function(){
-					window.location.href = 'loginPage';
+					window.location.href = 'login';
 					return false;
 				});
 			});
