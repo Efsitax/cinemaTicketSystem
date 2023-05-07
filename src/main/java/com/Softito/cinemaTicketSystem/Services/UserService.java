@@ -34,7 +34,6 @@ public class UserService implements IBaseService<User> {
     public User update(Long id, User entity) {
         User existingUser = getById(id);
         if (existingUser != null) {
-            existingUser.setUpdated_at(entity.getUpdated_at());
             existingUser.setName(entity.getName());
             existingUser.setBalance(entity.getBalance());
             existingUser.setSurname(entity.getSurname());
