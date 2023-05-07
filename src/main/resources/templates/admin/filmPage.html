@@ -34,7 +34,7 @@
 <div class="preloader">
   <div class="loader">
     <div class="loader__figure"></div>
-    <p class="loader__label">Admin Panel</p>
+    <p class="loader__label">Admin Pro</p>
   </div>
 </div>
 <!-- ============================================================== -->
@@ -45,8 +45,8 @@
   <!-- Topbar header - style you can find in pages.scss -->
   <!-- ============================================================== -->
   <header class="topbar">
-    <nav class="navbar navbar-expand-lg">
-      <a class="navbar-brand" href="/admin-panel">Cinema Ticket System Admin Panel</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/admin-login">Admin Panel</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -75,9 +75,7 @@
           <li> <a class="waves-effect waves-dark" href="/admin-panel" aria-expanded="false"><i
                   class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
           <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
-                  class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
-          <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
-                  class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
+                  class="mdi mdi-table"></i><span class="hide-menu">Saloons</span></a></li>
           <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
                   class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
         </ul>
@@ -101,8 +99,8 @@
       <!-- Bread crumb and right sidebar toggle -->
       <!-- ============================================================== -->
       <div class="row page-titles">
-        <a href="/admin-panel/saloon/add" class="btn btn-info">
-          <i class="fa fa-plus"></i> Add Saloon
+        <a href="/admin-panel/film/add" class="btn btn-info">
+          <i class="fa fa-plus"></i> Add Film
         </a>
 
       </div>
@@ -123,18 +121,23 @@
                 <table class="table">
                   <thead>
                   <tr>
-                    <th>Saloon Number</th>
-                    <th>Saloon Available</th>
-                    <th>Saloon Capacity</th>
-                    <th>Saloon Update</th>
+                    <th>Film Name</th>
+                    <th>Film Language</th>
+                    <th>Film Duration</th>
+                    <th>Film Price</th>
+                    <th>Film Is Active</th>
+                    <th>Film Description</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="salon : ${saloon}">
-                    <td th:text="${salon.saloonId}"></td>
-                    <td th:text="${salon.available}"></td>
-                    <td th:text="${salon.capacity}"></td>
-                    <td><a th:href="@{/admin-panel/saloon/edit/{id}(id=${salon.saloonId})}" class="btn btn-primary">Update</a></td>
+                  <tr th:each="fil : ${allFilms}">
+                    <td th:text="${fil.name}"></td>
+                    <td th:text="${fil.language}"></td>
+                    <td th:text="${fil.duration}"></td>
+                    <td th:text="${fil.price}"></td>
+                    <td th:text="${fil.isActive}"></td>
+                    <td class="myParagraph" th:text="${fil.description}"></td>
+                    <td><a th:href="@{/admin-panel/film/edit/{id}(id=${fil.filmId})}" class="btn btn-primary">Update</a></td>
                   </tr>
                   </tbody>
                 </table>
@@ -180,5 +183,16 @@
 <!--Custom JavaScript -->
 <script src="/admin-assests/js/custom.min.js"></script>
 </body>
+<script>
+  var paragraphs = document.getElementsByClassName("myParagraph");
 
+  for (var i = 0; i < paragraphs.length; i++) {
+    var paragraph = paragraphs[i];
+    var maxLength = 20; // Set the maximum character limit
+
+    if (paragraph.innerHTML.length > maxLength) {
+      paragraph.innerHTML = paragraph.innerHTML.substring(0, maxLength) + "...";
+    }
+  }
+</script>
 </html>

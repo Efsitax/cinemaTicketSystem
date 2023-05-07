@@ -69,6 +69,8 @@
                             class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
                     <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
                             class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
+                            class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
@@ -95,18 +97,18 @@
                 <div class="col-lg-8 col-xlg-9">
                     <div class="card">
                         <div class="card-body">
-                            <form method="post" class="form-horizontal form-material mx-2" th:action="@{/admin-panel/update/{id}(id=${saloon.saloonId})}">
+                            <form method="post" class="form-horizontal form-material mx-2" th:action="@{/admin-panel/saloon/update/{id}(id=${saloon.saloonId})}">
                                 <div class="form-group">
                                     <label class="col-md-12">Saloon Number</label>
                                     <div class="col-md-12">
-                                        <input type="text" th:placeholder="${saloon.saloonId}"
+                                        <input type="text" th:value="${saloon.saloonId}"
                                                class="form-control form-control-line" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-12">Capacity</label>
                                     <div class="col-md-12">
-                                        <input type="number" th:placeholder="${saloon.capacity}"
+                                        <input type="number" th:value="${saloon.capacity}"
                                                class="form-control form-control-line" id="capacity" name="capacity">
                                     </div>
                                 </div>
@@ -122,7 +124,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-success">Update Profile</button>
+                                        <button class="btn btn-success">Update Saloon</button>
                                     </div>
                                 </div>
                             </form>
