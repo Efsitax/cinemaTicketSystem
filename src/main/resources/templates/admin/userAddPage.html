@@ -28,23 +28,18 @@
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
-<!-- ============================================================== -->
-<!-- Preloader - style you can find in spinners.css -->
-<!-- ============================================================== -->
+
 <div class="preloader">
     <div class="loader">
         <div class="loader__figure"></div>
-        <p class="loader__label">Admin Pro</p>
+        <p class="loader__label">Admin Panel</p>
     </div>
 </div>
-<!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
-<!-- ============================================================== -->
 
 <div id="main-wrapper">
     <header class="topbar">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/admin-panel">Admin Panel</a>
+            <a class="navbar-brand" href="/admin-panel">Cinema Ticket System Admin Panel</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -61,7 +56,6 @@
     <aside class="left-sidebar">
         <!-- Sidebar scroll-->
         <div class="scroll-sidebar">
-        <div class="scroll-sidebar">
             <!-- Sidebar navigation-->
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
@@ -69,12 +63,11 @@
                             class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
                     <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
                             class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
-                    <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
-                            class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
+                            class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
-        </div>
         </div>
         <!-- End Sidebar scroll-->
     </aside>
@@ -97,34 +90,60 @@
                 <div class="col-lg-8 col-xlg-9">
                     <div class="card">
                         <div class="card-body">
-                            <form method="post" class="form-horizontal form-material mx-2" th:action="@{/admin-panel/saloon/update/{id}(id=${saloon.saloonId})}">
+                            <form method="post" class="form-horizontal form-material mx-2" th:action="@{/admin-panel/addUser}">
                                 <div class="form-group">
-                                    <label class="col-md-12">Saloon Number</label>
+                                    <label class="col-md-12">User Id</label>
                                     <div class="col-md-12">
-                                        <input type="text" th:value="${saloon.saloonId}"
+                                        <input type="text" th:placeholder="${userId}"
                                                class="form-control form-control-line" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Capacity</label>
+                                    <label class="col-md-12">Name</label>
                                     <div class="col-md-12">
-                                        <input type="number" th:value="${saloon.capacity}"
-                                               class="form-control form-control-line" id="capacity" name="capacity">
+                                        <input type="text" placeholder="name"
+                                               class="form-control form-control-line" id="name" name="name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Surname</label>
+                                    <div class="col-md-12">
+                                        <input type="text" placeholder="surname"
+                                               class="form-control form-control-line" id="surname" name="surname">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Email</label>
+                                    <div class="col-md-12">
+                                        <input type="email" placeholder="example@example.com"
+                                               class="form-control form-control-line" id="email" name="email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Password</label>
+                                    <div class="col-md-12">
+                                        <input type="password" placeholder="Password"
+                                               class="form-control form-control-line" id="password" name="password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Balance</label>
+                                    <div class="col-md-12">
+                                        <input type="number" placeholder="0"
+                                               class="form-control form-control-line" id="balance" name="balance">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Is Active</label>
+                                    <div class="col-md-12">
+                                        <input type="text" placeholder="true"
+                                               class="form-control form-control-line" id="isActive" name="isActive">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-sm-12">Update Status</label>
                                     <div class="col-sm-12">
-                                        <select class="form-control form-control-line" id="status" name="status">
-                                            <option>True</option>
-                                            <option>False</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-12">
-                                        <button class="btn btn-success">Update Saloon</button>
+                                        <button class="btn btn-success">Update Profile</button>
                                     </div>
                                 </div>
                             </form>

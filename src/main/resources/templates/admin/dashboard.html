@@ -45,51 +45,16 @@
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
         <header class="topbar">
-            <nav class="navbar top-navbar navbar-expand-md navbar-light">
-                <!-- ============================================================== -->
-                <!-- Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/admin-panel">
-                        Cinema Ticket System Admin Panel
-                        <!--  Logo icon b>
-
-                        </b>
-                        End Logo icon
-                        Logo text
-                        <span>
-
-                        </span>-->
-                    </a>
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav me-auto">
-                        <!-- This is  -->
-                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
-                                href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- User profile and search -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav my-lg-0">
-                        <!-- ============================================================== -->
-                        <!-- Search -->
-                        <!-- ============================================================== -->
-                        <li class="nav-item hidden-xs-down search-box"> <a
-                                class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i
-                                    class="ti-search"></i></a>
-                        </li>
-                        <!-- ============================================================== -->
-                        <!-- Profile -->
-                        <!-- ============================================================== -->
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="/admin-login">Cinema Ticket System Admin Panel</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link waves-effect waves-dark" href="#"></a>
+                            <a th:if="${token == 0}" class="nav-link" href="/admin-panel"><i class="fa fa-user">Log in</i></a>
+                            <a th:if="${token == 1}" class="nav-link" href="/admin-panel/logoutAdmin"><i class="fa fa-user">Log Out</i></a>
                         </li>
                     </ul>
                 </div>
@@ -111,6 +76,8 @@
                                     class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
                                 class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
+                        <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
+                                class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
                                 class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
                     </ul>

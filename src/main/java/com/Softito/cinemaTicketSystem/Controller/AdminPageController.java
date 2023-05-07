@@ -12,8 +12,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatt
 import java.io.IOException;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -211,6 +219,90 @@ public class AdminPageController {
         saloonService.update(id,saloon);
         return "redirect:/admin-panel/saloon";
     }
+
+    @GetMapping("/user")
+    public String userPage(Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<User> users = userService.getAll();
+            model.addAttribute("user", users);
+            return "/admin/userPage";
+        }
+    }
+    @GetMapping("/user/add")
+    public String addUserPage(Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<User> users = userService.getAll();
+            model.addAttribute("userId", users.size() + 100000);
+            return "admin/userAddPage";
+        }
+    }
+
+    @PostMapping("/addUser")
+    public String addUser(@RequestParam String name,
+                          @RequestParam String surname,
+                          @RequestParam String email,
+                          @RequestParam Long balance,
+                          @RequestParam String password,
+                          @RequestParam String isActive){
+        User user = new User();
+        user.setName(name);
+        user.setSurname(surname);
+        user.setEmail(email);
+        user.setBalance(balance);
+        user.setPassword(password);
+        user.setIsActive(Boolean.valueOf(isActive));
+        LocalDate currentDate = LocalDate.now();
+
+        // Format the date in "yyyy-MM-dd" format
+        String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        // Convert the formatted date to a java.util.Date object
+        Date date = java.sql.Date.valueOf(formattedDate);
+
+        user.setCreatedAt(date);
+        userService.create(user);
+        return "redirect:/admin-panel/user";
+    }
+    @GetMapping("/user/edit/{id}")
+    public String editUser(@PathVariable Long id,Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            User users = userService.getById(id);
+            model.addAttribute("user", users);
+            return "/admin/userEditPage";
+        }
+    }
+
+    @PostMapping("/user/update/{id}")
+    public String updateUser(@PathVariable Long id,
+                             @RequestParam String name,
+                             @RequestParam String surname,
+                             @RequestParam String email,
+                             @RequestParam Long balance,
+                             @RequestParam Boolean isActive,
+                             @RequestParam String createdAt) {
+        User user = userService.getById(id);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setEmail(email);
+        user.setBalance(balance);
+        user.setIsActive(isActive);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            java.util.Date utilDate = dateFormat.parse(createdAt);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            user.setCreatedAt(sqlDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        userService.update(id, user);
+        return "redirect:/admin-panel/user";
+    }
+
 }
 @Getter
 @Setter

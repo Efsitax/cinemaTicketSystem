@@ -35,7 +35,6 @@ public class AdminService implements IBaseService<Admin> {
             existingAdmin.setEmail(entity.getEmail());
             existingAdmin.setPassword(entity.getPassword());
             existingAdmin.setIsActive(entity.getIsActive());
-            existingAdmin.setPhoto(entity.getPhoto());
             return repository.save(existingAdmin);
         }
         return null;
