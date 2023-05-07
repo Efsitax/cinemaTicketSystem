@@ -11,7 +11,7 @@
     <meta name="description"
           content="Admin-Pro Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
-    <title>Admin-Pro Lite Template by WrapPixel</title>
+    <title>Cinema Ticket System Admin Panel</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/adminpro-lite/" />
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -38,8 +38,8 @@
 
 <div id="main-wrapper">
     <header class="topbar">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/admin-panel">Cinema Ticket System Admin Panel</a>
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="/admin-login">Cinema Ticket System Admin Panel</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -47,11 +47,11 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/admin-panel/logoutAdmin"><i class="fa fa-user">Log Out</i></a>
+
                     </li>
                 </ul>
             </div>
         </nav>
-
     </header>
     <aside class="left-sidebar">
         <!-- Sidebar scroll-->
@@ -62,9 +62,11 @@
                     <li> <a class="waves-effect waves-dark" href="/admin-panel" aria-expanded="false"><i
                             class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
                     <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
-                            class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
+                            class="mdi mdi-table"></i><span class="hide-menu">Saloons</span></a></li>
                     <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
-                            class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
+                            class="mdi mdi-table"></i><span class="hide-menu">Users</span></a></li>
+                    <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
+                            class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
@@ -143,7 +145,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-12">
-                                        <button class="btn btn-success">Update Profile</button>
+                                        <button class="btn btn-success">Add User</button>
                                     </div>
                                 </div>
                             </form>

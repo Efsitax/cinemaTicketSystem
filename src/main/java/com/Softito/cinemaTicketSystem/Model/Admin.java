@@ -32,6 +32,7 @@ public class Admin {
     private String token;
 
 
+
     @Column(name = "is_active",nullable = false)
     private Boolean isActive;
 
