@@ -28,22 +28,15 @@
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
-<!-- ============================================================== -->
-<!-- Preloader - style you can find in spinners.css -->
-<!-- ============================================================== -->
+
 <div class="preloader">
   <div class="loader">
     <div class="loader__figure"></div>
     <p class="loader__label">Admin Panel</p>
   </div>
 </div>
-<!-- ============================================================== -->
-<!-- Main wrapper - style you can find in pages.scss -->
-<!-- ============================================================== -->
+
 <div id="main-wrapper">
-  <!-- ============================================================== -->
-  <!-- Topbar header - style you can find in pages.scss -->
-  <!-- ============================================================== -->
   <header class="topbar">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="/admin-login">Admin Panel</a>
@@ -60,12 +53,6 @@
     </nav>
 
   </header>
-  <!-- ============================================================== -->
-  <!-- End Topbar header -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- Left Sidebar - style you can find in sidebar.scss  -->
-  <!-- ============================================================== -->
   <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
@@ -95,52 +82,74 @@
     <!-- Container fluid  -->
     <!-- ============================================================== -->
     <div class="container-fluid">
-      <!-- ============================================================== -->
-      <!-- Bread crumb and right sidebar toggle -->
-      <!-- ============================================================== -->
-      <div class="row page-titles">
-        <a href="/admin-panel/saloon/add" class="btn btn-info">
-          <i class="fa fa-plus"></i> Add Saloon
-        </a>
 
-      </div>
-      <!-- ============================================================== -->
-      <!-- End Bread crumb and right sidebar toggle -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Start Page Content -->
-      <!-- ============================================================== -->
       <div class="row">
-        <!-- column -->
-        <div class="col-lg-12">
+        <div class="col-lg-8 col-xlg-9">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Saloon Table</h4>
-
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                  <tr>
-                    <th>Saloon Number</th>
-                    <th>Saloon Available</th>
-                    <th>Saloon Capacity</th>
-                    <th>Saloon Update</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="salon : ${saloon}">
-                    <td th:text="${salon.saloonId}"></td>
-                    <td th:text="${salon.available}"></td>
-                    <td th:text="${salon.capacity}"></td>
-                    <td><a th:href="@{/admin-panel/saloon/edit/{id}(id=${salon.saloonId})}" class="btn btn-primary">Update</a></td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
+              <form method="post" class="form-horizontal form-material mx-2" enctype="multipart/form-data" th:action="@{/admin-panel/addFilm}">
+                <div class="form-group">
+                  <label class="col-md-12">Film Number</label>
+                  <div class="col-md-12">
+                    <input type="text" th:placeholder="${filmId}"
+                           class="form-control form-control-line" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Film Name</label>
+                  <div class="col-md-12">
+                    <input type="text" placeholder="Film Name"
+                           class="form-control form-control-line" id="name" name="name" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Film Description</label>
+                  <div class="col-md-12">
+                    <textarea  class="form-control form-control-line" id="description"
+                               name="description" placeholder="Film Description" rows="4" cols="50" required></textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Film Duration</label>
+                  <div class="col-md-12">
+                    <input type="number" placeholder="Film Duration"
+                           class="form-control form-control-line" id="duration" name="duration" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Film Price</label>
+                  <div class="col-md-12">
+                    <input type="number" placeholder="Film Price"
+                           class="form-control form-control-line" id="price" name="price" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Film Photo</label>
+                  <div class="col-md-12">
+                    <input type="file" name="photo" accept="image/*" required>
+                    <br><br>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-12">Update Status</label>
+                  <div class="col-sm-12">
+                    <select class="form-control form-control-line" id="status" name="status">
+                      <option>True</option>
+                      <option>False</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <button class="btn btn-success">Add Film</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
+      <!-- Row -->
       <!-- ============================================================== -->
       <!-- End PAge Content -->
       <!-- ============================================================== -->

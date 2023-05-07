@@ -1,6 +1,8 @@
 package com.Softito.cinemaTicketSystem.Controller;
 
 import com.Softito.cinemaTicketSystem.Model.*;
+
+import com.Softito.cinemaTicketSystem.Model.Ticket;
 import com.Softito.cinemaTicketSystem.Services.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +114,69 @@ public class AdminPageController {
             return "/admin/saloonPage";
         }
     }
-    @GetMapping("/add")
+    @GetMapping("/film")
+    public String filmPage(Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<Film> films = filmService.getAll();
+            model.addAttribute("allFilms", films);
+            return "admin/filmPage";
+        }
+    }
+    @GetMapping("/film/edit/{id}")
+    public String editFilm(@PathVariable Long id,Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+           Film film = filmService.getById(id);
+            model.addAttribute("film", film);
+            return "/admin/filmEditPage";
+        }
+    }
+    @PostMapping("/film/update/{id}")
+    public String updateFilm(@PathVariable Long id,
+                             @RequestParam String name,
+                             @RequestParam String description,
+                             @RequestParam Long duration,
+                             @RequestParam Long price,
+                             @RequestParam Boolean status,
+                             @RequestParam("photo") MultipartFile imageFile ) throws IOException {
+        Film film = filmService.getById(id);
+        film.setName(name);
+        film.setDescription(description);
+        film.setDuration(duration);
+        film.setPrice(price);
+        if(!imageFile.isEmpty()) film.setImage(imageFile.getBytes());
+        film.setIsActive(status);
+        filmService.update(id, film);
+        return "redirect:/admin-panel/film";
+    }
+    @GetMapping("/film/add")
+    public String addFilmPage(Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<Film> films = filmService.getAll();
+            model.addAttribute("filmId", films.size() + 1);
+            return "admin/filmAddPage";
+        }
+    }
+    @PostMapping("/addFilm")
+    public String addFilm(@RequestParam String name,
+                             @RequestParam String description,
+                             @RequestParam Long duration,
+                             @RequestParam Long price,
+                             @RequestParam Boolean status,
+                             @RequestParam("photo") MultipartFile imageFile ) throws IOException {
+        Film film = new Film();
+        film.setName(name);
+        film.setDescription(description);
+        film.setDuration(duration);
+        film.setPrice(price);
+        film.setImage(imageFile.getBytes());
+        film.setIsActive(status);
+        filmService.create(film);
+        return "redirect:/admin-panel/film";
+    }
+    @GetMapping("/saloon/add")
     public String addSaloonPage(Model model){
         if (token == 0) return "/admin/admin-login";
         else {
@@ -119,16 +185,7 @@ public class AdminPageController {
             return "/admin/saloonAddPage";
         }
     }
-
-    @PostMapping("/addSaloon")
-    public String addSaloon(@RequestParam Long capacity,@RequestParam Boolean status){
-        Saloon saloon=new Saloon();
-        saloon.setCapacity(capacity);
-        saloon.setAvailable(status);
-        saloonService.create(saloon);
-        return "redirect:/admin-panel/saloon";
-    }
-    @GetMapping("/edit/{id}")
+    @GetMapping("/saloon/edit/{id}")
     public String editSaloon(@PathVariable Long id,Model model){
         if (token == 0) return "/admin/admin-login";
         else {
@@ -137,7 +194,16 @@ public class AdminPageController {
             return "/admin/saloonEditPage";
         }
     }
-    @PostMapping("/update/{id}")
+    @PostMapping("/addSaloon")
+    public String addSaloon(@RequestParam Long capacity,@RequestParam Boolean status){
+        Saloon saloon=new Saloon();
+        saloon.setCapacity(capacity);
+        saloon.setAvailable(status);
+        saloonService.create(saloon);
+        return "redirect:/admin-panel/saloon";
+    }
+
+    @PostMapping("/saloon/update/{id}")
     public String updateSaloon(@PathVariable Long id, @RequestParam Long capacity,@RequestParam Boolean status ) {
         Saloon saloon=saloonService.getById(id);
         saloon.setAvailable(status);
