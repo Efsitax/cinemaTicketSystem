@@ -108,42 +108,49 @@
                 <div class="form-group">
                   <label class="col-md-12">Name</label>
                   <div class="col-md-12">
-                    <input type="text" th:placeholder="${user.name}"
+                    <input type="text" th:value="${user.name}"
                            class="form-control form-control-line" id="name" name="name">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Surname</label>
                   <div class="col-md-12">
-                    <input type="text" th:placeholder="${user.surname}"
+                    <input type="text" th:value="${user.surname}"
                            class="form-control form-control-line" id="surname" name="surname">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Email</label>
                   <div class="col-md-12">
-                    <input type="email" th:placeholder="${user.email}"
+                    <input type="email" th:value="${user.email}"
                            class="form-control form-control-line" id="email" name="email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Password</label>
+                  <div class="col-md-12">
+                    <input type="password" th:value="${user.password}"
+                           class="form-control form-control-line" id="password" name="password">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Balance</label>
                   <div class="col-md-12">
-                    <input type="text" th:placeholder="${user.balance}"
+                    <input type="text" th:value="${user.balance}"
                            class="form-control form-control-line" id="balance" name="balance" readonly>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Created At</label>
                   <div class="col-md-12">
-                    <input type="date" th:placeholder="${user.createdAt}"
+                    <input type="date" th:value="${user.createdAt}"
                            class="form-control form-control-line" id="createdAt" name="createdAt">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-12">Is Active</label>
                   <div class="col-md-12">
-                    <input type="text" th:placeholder="${user.isActive}"
+                    <input type="text" th:value="${user.isActive}"
                            class="form-control form-control-line" id="isActive" name="isActive">
                   </div>
                 </div>

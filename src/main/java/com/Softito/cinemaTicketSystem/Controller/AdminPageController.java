@@ -9,6 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -161,7 +166,7 @@ public class AdminPageController {
         if (token == 0) return "/admin/admin-login";
         else {
             List<User> users = userService.getAll();
-            model.addAttribute("userId", users.size() + 1);
+            model.addAttribute("userId", users.size() + 100000);
             return "admin/userAddPage";
         }
     }
@@ -171,15 +176,24 @@ public class AdminPageController {
                           @RequestParam String surname,
                           @RequestParam String email,
                           @RequestParam Long balance,
-                          @RequestParam Boolean isActive,
-                          @RequestParam Date createdAt){
+                          @RequestParam String password,
+                          @RequestParam String isActive){
         User user = new User();
         user.setName(name);
         user.setSurname(surname);
         user.setEmail(email);
         user.setBalance(balance);
-        user.setIsActive(isActive);
-        user.setCreatedAt(createdAt);
+        user.setPassword(password);
+        user.setIsActive(Boolean.valueOf(isActive));
+        LocalDate currentDate = LocalDate.now();
+
+        // Format the date in "yyyy-MM-dd" format
+        String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        // Convert the formatted date to a java.util.Date object
+        Date date = java.sql.Date.valueOf(formattedDate);
+
+        user.setCreatedAt(date);
         userService.create(user);
         return "redirect:/admin-panel/user";
     }
@@ -192,6 +206,7 @@ public class AdminPageController {
             return "/admin/userEditPage";
         }
     }
+
     @PostMapping("/user/update/{id}")
     public String updateUser(@PathVariable Long id,
                              @RequestParam String name,
@@ -199,15 +214,24 @@ public class AdminPageController {
                              @RequestParam String email,
                              @RequestParam Long balance,
                              @RequestParam Boolean isActive,
-                             @RequestParam Date createdAt) {
+                             @RequestParam String createdAt) {
         User user = userService.getById(id);
         user.setName(name);
         user.setSurname(surname);
         user.setEmail(email);
         user.setBalance(balance);
         user.setIsActive(isActive);
-        user.setCreatedAt(createdAt);
-        userService.update(id,user);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            java.util.Date utilDate = dateFormat.parse(createdAt);
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            user.setCreatedAt(sqlDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        userService.update(id, user);
         return "redirect:/admin-panel/user";
     }
 

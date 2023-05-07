@@ -32,9 +32,6 @@ public class Admin {
     private String token;
 
 
-    @Column(name = "photo", columnDefinition = "image")
-    private byte[] photo;
-
     @Column(name = "is_active",nullable = false)
     private Boolean isActive;
 
