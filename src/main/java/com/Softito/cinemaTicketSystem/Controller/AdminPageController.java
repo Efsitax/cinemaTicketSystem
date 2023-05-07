@@ -17,9 +17,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatt
 import java.io.IOException;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -143,6 +143,7 @@ public class AdminPageController {
     @PostMapping("/film/update/{id}")
     public String updateFilm(@PathVariable Long id,
                              @RequestParam String name,
+                             @RequestParam String language,
                              @RequestParam String description,
                              @RequestParam Long duration,
                              @RequestParam Long price,
@@ -150,6 +151,7 @@ public class AdminPageController {
                              @RequestParam("photo") MultipartFile imageFile ) throws IOException {
         Film film = filmService.getById(id);
         film.setName(name);
+        film.setLanguage(language);
         film.setDescription(description);
         film.setDuration(duration);
         film.setPrice(price);
@@ -169,13 +171,15 @@ public class AdminPageController {
     }
     @PostMapping("/addFilm")
     public String addFilm(@RequestParam String name,
-                             @RequestParam String description,
-                             @RequestParam Long duration,
-                             @RequestParam Long price,
-                             @RequestParam Boolean status,
-                             @RequestParam("photo") MultipartFile imageFile ) throws IOException {
+                          @RequestParam String language,
+                          @RequestParam String description,
+                          @RequestParam Long duration,
+                          @RequestParam Long price,
+                          @RequestParam Boolean status,
+                          @RequestParam("photo") MultipartFile imageFile ) throws IOException {
         Film film = new Film();
         film.setName(name);
+        film.setLanguage(language);
         film.setDescription(description);
         film.setDuration(duration);
         film.setPrice(price);

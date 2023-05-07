@@ -11,7 +11,7 @@
     <meta name="description"
         content="Admin-Pro Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
-    <title>Admin Panel</title>
+    <title>Cinema Ticket System Admin Panel</title>
     <link rel="canonical" href="https://www.wrappixel.com/templates/adminpro-lite/" />
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -53,8 +53,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a th:if="${token == 0}" class="nav-link" href="/admin-panel"><i class="fa fa-user">Log in</i></a>
-                            <a th:if="${token == 1}" class="nav-link" href="/admin-panel/logoutAdmin"><i class="fa fa-user">Log Out</i></a>
+                            <a class="nav-link" href="/admin-panel/logoutAdmin"><i class="fa fa-user">Log Out</i></a>
                         </li>
                     </ul>
                 </div>
@@ -75,9 +74,9 @@
                         <li> <a class="waves-effect waves-dark" href="/admin-panel" aria-expanded="false"><i
                                     class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
-                                class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
+                                class="mdi mdi-table"></i><span class="hide-menu">Saloons</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
-                                class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
+                                class="mdi mdi-table"></i><span class="hide-menu">Users</span></a></li>
                         <li> <a class="waves-effect waves-dark" href="/admin-panel/film" aria-expanded="false"><i
                                 class="mdi mdi-table"></i><span class="hide-menu">Films</span></a></li>
                     </ul>
@@ -141,7 +140,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer"> © 2021 Admin Pro by <a href="https://www.wrappixel.com/">wrappixel.com</a> </footer>
+            <footer class="footer"> © Cinema Management Panel</footer>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
