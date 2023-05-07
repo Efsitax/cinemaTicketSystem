@@ -1,6 +1,7 @@
 package com.Softito.cinemaTicketSystem.Services;
 
 import com.Softito.cinemaTicketSystem.Model.Admin;
+import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class AdminService implements IBaseService<Admin> {
         return repository.save(entity);
     }
 
+
     @Override
     public Admin update(Long id, Admin entity) {
         Admin existingAdmin = getById(id);
@@ -48,5 +50,13 @@ public class AdminService implements IBaseService<Admin> {
         else{
             return false;
         }
+    }
+
+    public boolean isEmailExist(String email){
+        Admin admin = repository.findByEmail(email);
+        return (admin != null);
+    }
+    public Admin getByEmail(String email){
+        return repository.findByEmail(email);
     }
 }

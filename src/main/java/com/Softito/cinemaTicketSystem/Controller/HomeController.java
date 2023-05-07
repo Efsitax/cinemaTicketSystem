@@ -31,6 +31,7 @@ public class HomeController {
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("token", token);
         model.addAttribute("films", films);
+        model.addAttribute("balance",user.getBalance());
         return "homePage";
     }
 
@@ -68,7 +69,7 @@ public class HomeController {
             model.addAttribute("emailError", message);
             error=0;
         }
-        return "loginPage";
+        return "homePage";
     }
 
     @GetMapping("/credit")
@@ -176,7 +177,7 @@ public class HomeController {
     public String loginUser(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
-        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/isemailexist?email="+email, Boolean.class);
+        Boolean isExist = restTemplate.getForObject("http://localhost:8080/users/is-email-exist?email="+email, Boolean.class);
         if (isExist) {
             user = restTemplate.getForObject("http://localhost:8080/users/email?email="+email, User.class);
             if (user.getPassword().equals(password)) {
@@ -202,7 +203,7 @@ public class HomeController {
         restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
         user = new User();
 
-        return "redirect:/filmsPage";
+        return "redirect:/home";
     }
     @PostMapping("/buyticket")
     @ResponseBody

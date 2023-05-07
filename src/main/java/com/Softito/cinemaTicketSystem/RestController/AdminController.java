@@ -1,6 +1,7 @@
 package com.Softito.cinemaTicketSystem.RestController;
 
 import com.Softito.cinemaTicketSystem.Model.Admin;
+import com.Softito.cinemaTicketSystem.Model.User;
 import com.Softito.cinemaTicketSystem.Services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,11 @@ public class AdminController {
     @PostMapping("/add")
     public Admin createAdmin(@RequestBody Admin entity) {
         return service.create(entity);
+    }
+
+    @GetMapping("/email")
+    public Admin getAdminByEmail(@RequestParam String email) {
+        return service.getByEmail(email);
     }
     @DeleteMapping("/delete/{id}")
     public Boolean deleteAdmin(@PathVariable Long id) {

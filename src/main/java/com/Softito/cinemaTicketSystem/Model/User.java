@@ -43,11 +43,6 @@ public class User {
     @Column(name = "created_at", columnDefinition = "smalldatetime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-
-    @Column(name = "updated_at", columnDefinition = "smalldatetime")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updated_at;
-
     @JsonCreator
     public User(@JsonProperty("user_id") Long id) {
         this.userId = id;
