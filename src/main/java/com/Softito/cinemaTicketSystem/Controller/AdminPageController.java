@@ -32,7 +32,19 @@ public class AdminPageController {
     @GetMapping("")
     public String home(Model model){
         model.addAttribute("token", token);
-        if (token == 0) return "/admin/admin-login";
+        if (token == 0) {
+            if(error==2){
+                String message = "Wrong email.";
+                model.addAttribute("emailError", message);
+                error=0;
+            }
+            if(error==3){
+                String message = "Wrong password.";
+                model.addAttribute("emailError", message);
+                error=0;
+            }
+            return "/admin/admin-login";
+        }
         else {
             List<Ticket> tickets = ticketService.getAll();
             Long totalEarning = 0L;
@@ -82,39 +94,34 @@ public class AdminPageController {
 
     }
 
-    @GetMapping("/isLogged/{id}")
-    public String isLogged(@PathVariable Long id,Model model) {
-        if (token == 1) {
-            return "redirect:/admin-panel/"+id;
-        } else {
-            return "redirect:/admin-login";
-        }
-    }
-
-
     @GetMapping("/logoutAdmin")
     public String logoutAdmin() {
         admin.setToken("0");
         token = 0;
         admin = new Admin();
-        return "redirect:/login";
+        return "redirect:/admin-panel";
     }
     @GetMapping("/saloon")
     public String saloonPage(Model model){
-        List<Saloon>saloons=saloonService.getAll();
-        model.addAttribute("saloon",saloons);
-        return "/admin/saloonPage";
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<Saloon> saloons = saloonService.getAll();
+            model.addAttribute("saloon", saloons);
+            return "/admin/saloonPage";
+        }
     }
     @GetMapping("/add")
     public String addSaloonPage(Model model){
-        List<Saloon>saloons=saloonService.getAll();
-        model.addAttribute("saloonId",saloons.size()+1);
-        return "/admin/saloonAddPage";
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<Saloon> saloons = saloonService.getAll();
+            model.addAttribute("saloonId", saloons.size() + 1);
+            return "/admin/saloonAddPage";
+        }
     }
 
     @PostMapping("/addSaloon")
     public String addSaloon(@RequestParam Long capacity,@RequestParam Boolean status){
-
         Saloon saloon=new Saloon();
         saloon.setCapacity(capacity);
         saloon.setAvailable(status);
@@ -123,9 +130,12 @@ public class AdminPageController {
     }
     @GetMapping("/edit/{id}")
     public String editSaloon(@PathVariable Long id,Model model){
-        Saloon saloons=saloonService.getById(id);
-        model.addAttribute("saloon",saloons);
-        return "/admin/saloonEditPage";
+        if (token == 0) return "/admin/admin-login";
+        else {
+            Saloon saloons = saloonService.getById(id);
+            model.addAttribute("saloon", saloons);
+            return "/admin/saloonEditPage";
+        }
     }
     @PostMapping("/update/{id}")
     public String updateSaloon(@PathVariable Long id, @RequestParam Long capacity,@RequestParam Boolean status ) {

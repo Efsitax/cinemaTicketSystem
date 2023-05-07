@@ -28,7 +28,7 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a th:if="${token == 0}" class="nav-link" href="/admin-panel/loginAdmin"><i class="fa fa-user">Log in</i></a>
+                <a th:if="${token == 0}" class="nav-link" href="/admin-panel"><i class="fa fa-user">Log in</i></a>
                 <a th:if="${token == 1}" class="nav-link" href="/admin-panel/logoutAdmin"><i class="fa fa-user">Log Out</i></a>
             </li>
         </ul>
@@ -66,6 +66,13 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
         </div>
     </div>
 </section>
+<script th:inline="javascript">
+    var errorMessage = [[${emailError}]];
 
+    // If the error message is not empty, display an alert
+    if (errorMessage !== null) {
+        alert(errorMessage);
+    }
+</script>
 </body>
 </html>
