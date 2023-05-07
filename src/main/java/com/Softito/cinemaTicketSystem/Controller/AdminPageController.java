@@ -99,6 +99,42 @@ public class AdminPageController {
         admin = new Admin();
         return "redirect:/login";
     }
+    @GetMapping("/saloon")
+    public String saloonPage(Model model){
+        List<Saloon>saloons=saloonService.getAll();
+        model.addAttribute("saloon",saloons);
+        return "/admin/saloonPage";
+    }
+    @GetMapping("/add")
+    public String addSaloonPage(Model model){
+        List<Saloon>saloons=saloonService.getAll();
+        model.addAttribute("saloonId",saloons.size()+1);
+        return "/admin/saloonAddPage";
+    }
+
+    @PostMapping("/addSaloon")
+    public String addSaloon(@RequestParam Long capacity,@RequestParam Boolean status){
+
+        Saloon saloon=new Saloon();
+        saloon.setCapacity(capacity);
+        saloon.setAvailable(status);
+        saloonService.create(saloon);
+        return "redirect:/admin-panel/saloon";
+    }
+    @GetMapping("/edit/{id}")
+    public String editSaloon(@PathVariable Long id,Model model){
+        Saloon saloons=saloonService.getById(id);
+        model.addAttribute("saloon",saloons);
+        return "/admin/saloonEditPage";
+    }
+    @PostMapping("/update/{id}")
+    public String updateSaloon(@PathVariable Long id, @RequestParam Long capacity,@RequestParam Boolean status ) {
+        Saloon saloon=saloonService.getById(id);
+        saloon.setAvailable(status);
+        saloon.setCapacity(capacity);
+        saloonService.update(id,saloon);
+        return "redirect:/admin-panel/saloon";
+    }
 }
 @Getter
 @Setter
