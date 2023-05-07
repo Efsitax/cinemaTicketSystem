@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -145,6 +146,71 @@ public class AdminPageController {
         saloonService.update(id,saloon);
         return "redirect:/admin-panel/saloon";
     }
+
+    @GetMapping("/user")
+    public String userPage(Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<User> users = userService.getAll();
+            model.addAttribute("user", users);
+            return "/admin/userPage";
+        }
+    }
+    @GetMapping("/user/add")
+    public String addUserPage(Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            List<User> users = userService.getAll();
+            model.addAttribute("userId", users.size() + 1);
+            return "admin/userAddPage";
+        }
+    }
+
+    @PostMapping("/addUser")
+    public String addUser(@RequestParam String name,
+                          @RequestParam String surname,
+                          @RequestParam String email,
+                          @RequestParam Long balance,
+                          @RequestParam Boolean isActive,
+                          @RequestParam Date createdAt){
+        User user = new User();
+        user.setName(name);
+        user.setSurname(surname);
+        user.setEmail(email);
+        user.setBalance(balance);
+        user.setIsActive(isActive);
+        user.setCreatedAt(createdAt);
+        userService.create(user);
+        return "redirect:/admin-panel/user";
+    }
+    @GetMapping("/user/edit/{id}")
+    public String editUser(@PathVariable Long id,Model model){
+        if (token == 0) return "/admin/admin-login";
+        else {
+            User users = userService.getById(id);
+            model.addAttribute("user", users);
+            return "/admin/userEditPage";
+        }
+    }
+    @PostMapping("/user/update/{id}")
+    public String updateUser(@PathVariable Long id,
+                             @RequestParam String name,
+                             @RequestParam String surname,
+                             @RequestParam String email,
+                             @RequestParam Long balance,
+                             @RequestParam Boolean isActive,
+                             @RequestParam Date createdAt) {
+        User user = userService.getById(id);
+        user.setName(name);
+        user.setSurname(surname);
+        user.setEmail(email);
+        user.setBalance(balance);
+        user.setIsActive(isActive);
+        user.setCreatedAt(createdAt);
+        userService.update(id,user);
+        return "redirect:/admin-panel/user";
+    }
+
 }
 @Getter
 @Setter

@@ -11,7 +11,7 @@
   <meta name="description"
         content="Admin-Pro Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
   <meta name="robots" content="noindex,nofollow">
-  <title>Admin-Pro Lite Template by WrapPixel</title>
+  <title>Cinema Ticket System Admin Panel</title>
   <link rel="canonical" href="https://www.wrappixel.com/templates/adminpro-lite/" />
   <!-- Bootstrap Core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -77,7 +77,7 @@
           <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
                   class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
           <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
-                  class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
+                  class="mdi mdi-table"></i><span class="hide-menu">User Table</span></a></li>
         </ul>
       </nav>
       <!-- End Sidebar navigation -->
@@ -99,8 +99,8 @@
       <!-- Bread crumb and right sidebar toggle -->
       <!-- ============================================================== -->
       <div class="row page-titles">
-        <a href="/admin-panel/add" class="btn btn-info">
-          <i class="fa fa-plus"></i> Add Saloon
+        <a href="/admin-panel/user/add" class="btn btn-info">
+          <i class="fa fa-plus"></i> Add User
         </a>
 
       </div>
@@ -115,24 +115,31 @@
         <div class="col-lg-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Saloon Table</h4>
+              <h4 class="card-title">User List</h4>
 
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                   <tr>
-                    <th>Saloon Number</th>
-                    <th>Saloon Available</th>
-                    <th>Saloon Capacity</th>
-                    <th>Saloon Update</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>isActive</th>
+                    <th>Created At</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr th:each="salon : ${saloon}">
-                    <td th:text="${salon.saloonId}"></td>
-                    <td th:text="${salon.available}"></td>
-                    <td th:text="${salon.capacity}"></td>
-                    <td><a th:href="@{/admin-panel/edit/{id}(id=${salon.saloonId})}" class="btn btn-primary">Update</a></td>
+                  <tr th:each="user : ${user}">
+                    <td th:text="${user.userId}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.balance}"></td>
+                    <td th:text="${user.isActive}"></td>
+                    <td th:text="${user.createdAt}"></td>
+                    <td><a th:href="@{/admin-panel/user/edit/{id}(id=${user.userId})}" class="btn btn-primary">Update</a></td>
                   </tr>
                   </tbody>
                 </table>

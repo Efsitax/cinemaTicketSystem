@@ -34,19 +34,17 @@
 <div class="preloader">
   <div class="loader">
     <div class="loader__figure"></div>
-    <p class="loader__label">Admin Panel</p>
+    <p class="loader__label">Admin Pro</p>
   </div>
 </div>
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
+
 <div id="main-wrapper">
-  <!-- ============================================================== -->
-  <!-- Topbar header - style you can find in pages.scss -->
-  <!-- ============================================================== -->
   <header class="topbar">
-    <nav class="navbar navbar-expand-lg">
-      <a class="navbar-brand" href="/admin-panel">Cinema Ticket System Admin Panel</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/admin-panel">Admin Panel</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -60,27 +58,23 @@
     </nav>
 
   </header>
-  <!-- ============================================================== -->
-  <!-- End Topbar header -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- Left Sidebar - style you can find in sidebar.scss  -->
-  <!-- ============================================================== -->
   <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
-      <!-- Sidebar navigation-->
-      <nav class="sidebar-nav">
-        <ul id="sidebarnav">
-          <li> <a class="waves-effect waves-dark" href="/admin-panel" aria-expanded="false"><i
-                  class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
-          <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
-                  class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
-          <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
-                  class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
-        </ul>
-      </nav>
-      <!-- End Sidebar navigation -->
+      <div class="scroll-sidebar">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+          <ul id="sidebarnav">
+            <li> <a class="waves-effect waves-dark" href="/admin-panel" aria-expanded="false"><i
+                    class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a></li>
+            <li> <a class="waves-effect waves-dark" href="/admin-panel/saloon" aria-expanded="false"><i
+                    class="mdi mdi-table"></i><span class="hide-menu">Saloon Table</span></a></li>
+            <li> <a class="waves-effect waves-dark" href="/admin-panel/user" aria-expanded="false"><i
+                    class="mdi mdi-table"></i><span class="hide-menu">User List</span></a></li>
+          </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
     </div>
     <!-- End Sidebar scroll-->
   </aside>
@@ -95,52 +89,77 @@
     <!-- Container fluid  -->
     <!-- ============================================================== -->
     <div class="container-fluid">
-      <!-- ============================================================== -->
-      <!-- Bread crumb and right sidebar toggle -->
-      <!-- ============================================================== -->
-      <div class="row page-titles">
-        <a href="/admin-panel/add" class="btn btn-info">
-          <i class="fa fa-plus"></i> Add Saloon
-        </a>
 
-      </div>
-      <!-- ============================================================== -->
-      <!-- End Bread crumb and right sidebar toggle -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- Start Page Content -->
-      <!-- ============================================================== -->
       <div class="row">
-        <!-- column -->
-        <div class="col-lg-12">
+        <!-- Column -->
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-lg-8 col-xlg-9">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Saloon Table</h4>
+              <form method="post" class="form-horizontal form-material mx-2" th:action="@{/admin-panel/user/update/{id}(id=${user.userId})}">
+                <div class="form-group">
+                  <label class="col-md-12">User Id</label>
+                  <div class="col-md-12">
+                    <input type="text" th:placeholder="${user.userId}"
+                           class="form-control form-control-line" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Name</label>
+                  <div class="col-md-12">
+                    <input type="text" th:placeholder="${user.name}"
+                           class="form-control form-control-line" id="name" name="name">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Surname</label>
+                  <div class="col-md-12">
+                    <input type="text" th:placeholder="${user.surname}"
+                           class="form-control form-control-line" id="surname" name="surname">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Email</label>
+                  <div class="col-md-12">
+                    <input type="email" th:placeholder="${user.email}"
+                           class="form-control form-control-line" id="email" name="email">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Balance</label>
+                  <div class="col-md-12">
+                    <input type="text" th:placeholder="${user.balance}"
+                           class="form-control form-control-line" id="balance" name="balance" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Created At</label>
+                  <div class="col-md-12">
+                    <input type="date" th:placeholder="${user.createdAt}"
+                           class="form-control form-control-line" id="createdAt" name="createdAt">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-12">Is Active</label>
+                  <div class="col-md-12">
+                    <input type="text" th:placeholder="${user.isActive}"
+                           class="form-control form-control-line" id="isActive" name="isActive">
+                  </div>
+                </div>
 
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                  <tr>
-                    <th>Saloon Number</th>
-                    <th>Saloon Available</th>
-                    <th>Saloon Capacity</th>
-                    <th>Saloon Update</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="salon : ${saloon}">
-                    <td th:text="${salon.saloonId}"></td>
-                    <td th:text="${salon.available}"></td>
-                    <td th:text="${salon.capacity}"></td>
-                    <td><a th:href="@{/admin-panel/edit/{id}(id=${salon.saloonId})}" class="btn btn-primary">Update</a></td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <button class="btn btn-success">Update Profile</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
+        <!-- Column -->
       </div>
+      <!-- Row -->
       <!-- ============================================================== -->
       <!-- End PAge Content -->
       <!-- ============================================================== -->
