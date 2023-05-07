@@ -26,7 +26,7 @@ public class HomeController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home(Model model){
         List<Film> films = restTemplate.getForObject("http://localhost:8080/films", List.class);
         model.addAttribute("token", token);
@@ -69,7 +69,7 @@ public class HomeController {
             model.addAttribute("emailError", message);
             error=0;
         }
-        return "homePage";
+        return "loginPage";
     }
 
     @GetMapping("/credit")
