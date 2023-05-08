@@ -283,6 +283,7 @@ public class AdminPageController {
     public String updateUser(@PathVariable Long id,
                              @RequestParam String name,
                              @RequestParam String surname,
+                             @RequestParam String password,
                              @RequestParam String email,
                              @RequestParam Long balance,
                              @RequestParam Boolean isActive,
@@ -290,6 +291,7 @@ public class AdminPageController {
         User user = userService.getById(id);
         user.setName(name);
         user.setSurname(surname);
+        user.setPassword(password);
         user.setEmail(email);
         user.setBalance(balance);
         user.setIsActive(isActive);

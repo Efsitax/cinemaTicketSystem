@@ -203,7 +203,7 @@ public class HomeController {
         restTemplate.put("http://localhost:8080/users/update/" + user.getUserId(), user);
         user = new User();
 
-        return "redirect:/home";
+        return "redirect:/";
     }
     @PostMapping("/buyticket")
     @ResponseBody
